@@ -15,4 +15,4 @@ You can find the following information here:
 - The [preregistration](preregistration.html) 
 - A list where I needed to [deviate](preregistration_changes.Rmd) from the preregistration. 
 
-This website is produced directly from the project's [github repository](https://github.com/tdienlin/Austrian_Corona_Panel_Project). You can download the material and the data, file an issue, or submit a pull request.
+This website is produced directly from the project's [github repository](https://github.com/tdienlin/Austrian_Corona_Panel). You can download the material and the data, file an issue, or submit a pull request.

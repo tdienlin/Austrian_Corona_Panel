@@ -26,18 +26,13 @@ Load packages, and make repo replicable.
 
 ```{r r-setup, results='hide'}
 # install packages
-# devtools::install_github("https://github.com/tdienlin/td")
+# devtools::install_github("https://github.com/tdienlin/td@v.0.0.2.5")
 
 # define packages
-packages <- c("brms", "corrplot", "devtools", "GGally", "ggplot2", 
-              "gridExtra", "haven", "kableExtra", "knitr", 
-              "lavaan", "lme4", "magrittr", "mice", "mvnormalTest", "PerFit", 
-              "psych", "quanteda.textstats",
-              "pwr", "purrr", "semPlot", "semTools", "tidyverse")
-
-# renv::install(packages)
-# renv::install("tdienlin/td@v.0.0.2.5")  # uncomment to install
-# renv::install("crsh/papaja@v0.1.0.9997")  # uncomment to install
+packages <- c("brms", "devtools", "GGally", "ggplot2", 
+              "gridExtra", "kableExtra", "knitr", "lavaan", "lme4", 
+              "magrittr", "mice", "mvnormalTest", 
+              "PerFit", "psych", "quanteda.textstats", "semTools", "tidyverse")
 
 # load packages
 lapply(c(packages, "td"), library, character.only = TRUE)

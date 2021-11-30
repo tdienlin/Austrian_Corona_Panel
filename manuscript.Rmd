@@ -45,42 +45,27 @@ header-includes:
 # Seed for random number generation
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed,
-                      cache=T,
-                      echo=F
-                      # , fig.pos = 'h'
+                      cache=T, echo=F
                       )
 ```
 
 ```{r setup, include=F, cache=F}
 
-# make project reproducible
-# devtools::install_github("rstudio/renv")  # install renv
-# renv::init()  # initialize renv
-
 # install necessary packages
+# devtools::install_github("https://github.com/tdienlin/td@v.0.0.2.5")
+# devtools::install_github("https://github.com/crsh/papaja@devel")
+
+# load packages
 packages <- c("devtools", "english", "ggplot2", "kableExtra", 
               "lavaan", "lme4", "lmerTest",
               "magrittr", "semPlot", "tidyverse")
-# renv::install(packages)
-# renv::install("tdienlin/td@v.0.0.2.5")  # uncomment to install
-# renv::install("crsh/papaja@v0.1.0.9997")  # uncomment to install
-# renv::install("crsh/papaja@devel")  # uncomment to install
-
-# load packages
 lapply(c(packages, "papaja", "td"), library, character.only = TRUE)
-
-# save snapshot of installed packages
-# renv::snapshot()
 
 # load workspace created from analyses.rmd to use results
 load("data/workspace_2.RData")
-
-# export references
-# r_refs(file = "bibliography/r-references.bib")
 ```
 
 During the COVID-19 pandemic, 
-<!-- and especially in the beginning,  -->
 numerous events unfolded in quick succession.
 Several open questions emerged.
 How dangerous is the virus? 
@@ -287,7 +272,7 @@ The (anonymous) preregistration can be accessed here: https://osf.io/87b24/?view
 Because in this study I analyzed data from an already existing large-scale data set, all of these steps were done prior to accessing the data.
 The preregistration was designed on the basis of the panel documentation online [@kittelAustrianCoronaPanel2020].
 In some cases I could not execute the analyses as I had originally planned, for example because some properties of the variables only became apparent when inspecting the actual data.
-The most relevant deviations are reported below, and a complete list of all changes can be found in the online [companion website](https://xmtra.github.io/Austrian_Corona_Panel_Project/index.html) (https://xmtra.github.io/Austrian_Corona_Panel_Project/index.html).
+The most relevant deviations are reported below, and a complete list of all changes can be found in the online [companion website](https://tdienlin.github.io/Austrian_Corona_Panel/index.html) (https://tdienlin.github.io/Austrian_Corona_Panel/index.html).
 
 ## Sample
 
@@ -356,13 +341,13 @@ To avoid overfitting, I tested the scales on more liberal fit criteria (CFI > .9
 Finally, REWB-models cannot model scales as latent variables.
 To increase precision, I therefore exported factor scores from the CFAs for positive and negative affect.
 
-For more information on the analyses, for example a complete documentation of the models and their results, see [companion website](https://xmtra.github.io/Austrian_Corona_Panel_Project/index.html).
+For more information on the analyses, for example a complete documentation of the models and their results, see [companion website](https://tdienlin.github.io/Austrian_Corona_Panel/index.html).
 
 ## Measures
 
 In what follows, I list all the variables that I analyzed.
 For the variables' means, range, and variance, see Table \@ref(tab:descriptives).
-For a complete list of all items and item characteristics, see [companion website](https://xmtra.github.io/Austrian_Corona_Panel_Project/index.html).
+For a complete list of all items and item characteristics, see [companion website](https://tdienlin.github.io/Austrian_Corona_Panel/index.html).
 
 ### Well-being
 
@@ -506,7 +491,7 @@ knitr::include_graphics("figures/fig_results_control_std.pdf")
 To find out whether my inferences were robust across legitimate alternative analyses, I reran the analyses also using standardized estimates,  mean scores instead of factor scores, and with a data set where missing data were not imputed.
 The results were virtually the same.
 For example, all standardized COVID-19 related types of social media use or channels were not significantly larger than a SESOI of $\beta$ = |.10|.
-The additional analyses are reported in the [companion website](https://xmtra.github.io/Austrian_Corona_Panel_Project/analyses_additional.html).
+The additional analyses are reported in the [companion website](https://tdienlin.github.io/Austrian_Corona_Panel/analyses_additional.html).
 
 # Discussion
 
@@ -600,7 +585,7 @@ I declare no competing interests.
   
 # Supplementary Material
 
-All the stimuli, presentation materials, analysis scripts, and a reproducible version of the manuscript can be found on the companion website (https://xmtra.github.io/Austrian_Corona_Panel_Project/index.html).
+All the stimuli, presentation materials, analysis scripts, and a reproducible version of the manuscript can be found on the companion website (https://tdienlin.github.io/Austrian_Corona_Panel/index.html).
 
 # Data Accessibility Statement
 
