@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Preregistration</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="manuscript.html">Manuscript</a>
+</li>
+<li>
+  <a href="analyses.html">Analyses</a>
+</li>
+<li>
+  <a href="analyses_additional.html">Additional analyses</a>
+</li>
+<li>
+  <a href="items_english.html">Items</a>
+</li>
+<li>
+  <a href="items_german.html">Items German</a>
+</li>
+<li>
+  <a href="preregistration.html">Preregistration</a>
+</li>
+<li>
+  <a href="preregistration_changes.html">Preregistration Changes</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="manuscript.pdf">
+    <span class="fa fa-file"></span>
+     
+    PDF
+  </a>
+</li>
+<li>
+  <a href="https://github.com/tdienlin/Austrian_Corona_Panel_Project">
+    <span class="fa fa-lg fa-github"></span>
+     
+    Source Code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Preregistration</h1>
+
+</div>
+
+
+<p>The actual preregistration can be found <a href="https://osf.io/87b24/?view_only=b2289b6fec214fa88ee75a18d45c18f3">here</a>. I have also pasted it below.</p>
+<div id="hypotheses" class="section level2">
+<h2>Hypotheses</h2>
+<p>The within-person effects of all types of COVID-19 related social media use on all types of well-being indicators will be trivial, while controlling for several stable and varying covariates such as sociodemographic variables and psychological dispositions.</p>
+</div>
+<div id="design-plan" class="section level2">
+<h2>Design Plan</h2>
+<div id="study-type" class="section level4">
+<h4>Study type</h4>
+<p>Observational Study - Data is collected from study subjects that are not randomly assigned to a treatment. This includes surveys, “natural experiments,” and regression discontinuity designs.</p>
+</div>
+<div id="blinding" class="section level4">
+<h4>Blinding</h4>
+<p>No blinding is involved in this study.</p>
+</div>
+<div id="is-there-any-additional-blinding-in-this-study" class="section level4">
+<h4>Is there any additional blinding in this study?</h4>
+<p>No response</p>
+</div>
+</div>
+<div id="study-design" class="section level2">
+<h2>Study design</h2>
+<p>Secondary data analysis of a questionnaire-based panel study with 24 waves that consist of at least 1,500 participants per wave. A large number of questions was collected each, and a subset will be used for this study.</p>
+<div id="randomization" class="section level4">
+<h4>Randomization</h4>
+<p>No response</p>
+</div>
+<div id="sampling-plan" class="section level4">
+<h4>Sampling Plan</h4>
+<p>Existing Data</p>
+<p>Registration prior to accessing the data</p>
+</div>
+<div id="explanation-of-existing-data" class="section level4">
+<h4>Explanation of existing data</h4>
+<p>I will analyze the Austrian Corona Panel. The data are posted on AUSSDA (<a href="https://doi.org/10.11587/28KQNS" class="uri">https://doi.org/10.11587/28KQNS</a>). I have not yet accessed the data. I have used the study description online to design the preregistration. After finishing the preregistration, I plan to create a login on AUSSDA. I will then download the scientific use file. In case the use file should not contain some of the variables I preselected, or if they are recoded such that the variables cannot be used, I will directly contact the study authors to ask for access to the original data set. In case this won’t be possible, I will slightly change the analyses so that I can use the scientific use file.</p>
+</div>
+<div id="data-collection-procedures" class="section level4">
+<h4>Data collection procedures</h4>
+<p>I will use the already existing data set. Information on how the data was collected can be found here: <a href="https://viecer.univie.ac.at/coronapanel/austrian-corona-panel-data/method-report/" class="uri">https://viecer.univie.ac.at/coronapanel/austrian-corona-panel-data/method-report/</a></p>
+</div>
+<div id="sample-size" class="section level4">
+<h4>Sample size</h4>
+<p>The sample consists of at least 1,500 respondents per wave. Panel attrition was remedied by collecting new respondents. The overall and final sample size is not reported online, and will know it once I have downloaded the final data set.</p>
+</div>
+<div id="sample-size-rationale" class="section level4">
+<h4>Sample size rationale</h4>
+<p>The sample size was predetermined by the original study authors.</p>
+</div>
+<div id="stopping-rule" class="section level4">
+<h4>Stopping rule</h4>
+<p>Data collection is already finished.</p>
+</div>
+</div>
+<div id="variables" class="section level2">
+<h2>Variables</h2>
+<div id="manipulated-variables" class="section level4">
+<h4>Manipulated variables</h4>
+<p>No variables were manipulated.</p>
+</div>
+<div id="measured-variables" class="section level4">
+<h4>Measured variables</h4>
+<p>(Note: To improve readability, compared to the actual <a href="https://osf.io/87b24/?view_only=b2289b6fec214fa88ee75a18d45c18f3">preregistration</a> the following part was reformatted and partially translated. No actual changes were introduced.)</p>
+<p>In what follows, I list all the variables that I will use for the analyses (which also means that they cannot be dropped later). Note that the data set contains many more variables that I will not use. I provide the variable name in English, and the response options, answer format, and items in German.</p>
+<div id="life-satisfaction" class="section level6">
+<h6>Life Satisfaction</h6>
+<p>“Taken everything together, how satisfied are you currently with your life?”</p>
+<p>(0 = extremely unsatisfied, 10 = extremely satisfied)</p>
+</div>
+<div id="positive-affect-scale" class="section level6">
+<h6>Positive Affect (scale)</h6>
+<p>“In the last week, how often did you feel”</p>
+<ul>
+<li>a: … calm and relaxed</li>
+<li>e: … happy</li>
+<li>i: … full of energy</li>
+</ul>
+<p>(never [1]; on some days [2]; several times per week [3]; almost every day [4]; daily [5])</p>
+</div>
+<div id="negative-affect-scale" class="section level6">
+<h6>Negative Affect (scale)</h6>
+<p>“In the last week, how often did you feel”</p>
+<ul>
+<li>b: … lonely</li>
+<li>c: … aggravated</li>
+<li>d: … so depressed, that nothing could lift you up</li>
+<li>f: … very nervous</li>
+<li>g: … anxious</li>
+<li>h: … glum and sad</li>
+</ul>
+<p>(never [1]; on some days [2]; several times per week [3]; almost every day [4]; daily [5])</p>
+</div>
+<div id="social-media-use-reading" class="section level6">
+<h6>Social media use: Reading</h6>
+<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen Netzwerken gesetzt?”</p>
+<ul>
+<li>“Postings anderer lesen, in denen es um Inhalte zum Coronavirus geht”</li>
+</ul>
+<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche; 4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
+</div>
+<div id="social-media-use-liking-sharing" class="section level6">
+<h6>Social media use: Liking &amp; Sharing</h6>
+<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen Netzwerken gesetzt?”</p>
+<ul>
+<li>“Bei Postings anderer zum Coronavirus auf den „Gefällt mir“ Button drücken, „teilen“ oder „retweeten“”</li>
+</ul>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+</div>
+<div id="social-media-use-active-postings" class="section level6">
+<h6>Social media use: Active Postings</h6>
+<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen Netzwerken gesetzt?”</p>
+<ul>
+<li>“Selbst Postings zum Coronavirus in Sozialen Netzwerken verfasst”</li>
+</ul>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+</div>
+<div id="social-media-use-specific-platforms" class="section level6">
+<h6>Social media use: Specific platforms</h6>
+<p>“Wie oft in der letzten Woche haben Sie Informationen zur Corona-Krise in den folgenden Sozialen Medien verfolgt?”</p>
+<ul>
+<li>Facebook</li>
+<li>Twitter</li>
+<li>Instagram</li>
+<li>Youtube</li>
+<li>WhatsApp</li>
+</ul>
+<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche; 4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
+</div>
+<div id="gender" class="section level6">
+<h6>Gender</h6>
+<p>“Welches Geschlecht haben Sie?”</p>
+<p>(a: Männlich; b Weiblich; c: Divers)</p>
+</div>
+<div id="age" class="section level6">
+<h6>Age</h6>
+<p>“In welchem Jahr wurden Sie geboren?”</p>
+<p>(Jahr)</p>
+</div>
+<div id="education" class="section level6">
+<h6>Education</h6>
+<p>“Was ist der höchste Schul- oder Bildungsabschluss, den Sie erreicht haben?”</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>Volksschule oder weniger</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>Hauptschule oder AHS Unterstufe</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>Polytechnikum, BMS (Fachschule, z.B. HASCH)</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>Lehre, Berufsschule</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>AHS mit Matura</li>
+</ol></li>
+<li><ol start="6" style="list-style-type: lower-alpha">
+<li>BHS mit Matura (z.B. HTL, HAK, HBLA etc.)</li>
+</ol></li>
+<li><ol start="7" style="list-style-type: lower-alpha">
+<li>Hochschulverwandte Lehranstalt oder Kolleg</li>
+</ol></li>
+<li><ol start="8" style="list-style-type: lower-alpha">
+<li>Bachelor</li>
+</ol></li>
+<li><ol style="list-style-type: lower-roman">
+<li>Magister / Master / Diplomingenieur / Fachhochschule</li>
+</ol></li>
+<li><ol start="10" style="list-style-type: lower-alpha">
+<li>Doktor / PhD</li>
+</ol></li>
+</ul>
+</div>
+<div id="austria-country-of-birth" class="section level6">
+<h6>Austria country of birth</h6>
+<p>“Ist Ihr Geburtsland Österreich?”</p>
+<ul>
+<li>Ja</li>
+<li>Nein</li>
+</ul>
+</div>
+<div id="austria-country-of-birth-of-parents" class="section level6">
+<h6>Austria country of birth of parents</h6>
+<p>“Wurde einer oder beide Ihrer Elternteile nicht in Österreich geboren?”</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>Ja, einer</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>Ja, beide</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>Nein</li>
+</ol></li>
+</ul>
+</div>
+<div id="news-consumption-text-based" class="section level6">
+<h6>News consumption: Text-based</h6>
+<p>“Nachstehend finden Sie eine Liste mit verschiedenen Tageszeitungen. Wie oft haben Sie sich letzte Woche über das politische Geschehen in der jeweiligen Zeitung (im Internet oder gedruckt) informiert?”</p>
+<ul>
+<li>Kronen Zeitung oder www.krone.at</li>
+<li>Der Standard oder derstandard.at</li>
+<li>Die Presse oder diepresse.com</li>
+<li>Österreich oder oe24.at</li>
+<li>Kurier oder kurier.at</li>
+<li>Salzburger Nachrichten oder salzburg.at</li>
+<li>Sonstige österreichische Tageszeitungen</li>
+</ul>
+</div>
+<div id="news-consumption-video-based" class="section level6">
+<h6>News consumption: Video-based</h6>
+<p>“Nachstehend finden Sie eine Liste mit verschiedenen Nachrichtensendungen im Fernsehen. Wie oft haben Sie sich letzte Woche über das politische Geschehen in den folgenden Nachrichtensendungen informiert?”</p>
+<ul>
+<li>“Nachrichtensendungen im ORF (z.B. Zeit im Bild um 19:30h oder ZiB 2 um 22:00h)”</li>
+<li>“Nachrichtensendungen im Privatfernsehen (z.B. ATV aktuell, Puls 4/ Pro7/ Sat1 Austria)”</li>
+</ul>
+<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche; 4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
+</div>
+<div id="residency-vienna" class="section level6">
+<h6>Residency Vienna</h6>
+<p>“In welchem Bundesland leben Sie aktuell?”</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>Vorarlberg</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>Tirol</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>Salzburg</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>Steiermark</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>Kärnten</li>
+</ol></li>
+<li><ol start="6" style="list-style-type: lower-alpha">
+<li>Oberösterreich</li>
+</ol></li>
+<li><ol start="7" style="list-style-type: lower-alpha">
+<li>Niederösterreich</li>
+</ol></li>
+<li><ol start="8" style="list-style-type: lower-alpha">
+<li>Wien</li>
+</ol></li>
+<li><ol style="list-style-type: lower-roman">
+<li>Burgenland</li>
+</ol></li>
+</ul>
+<p>(Will be transformed to Vienna: yes/no)</p>
+</div>
+<div id="household-size" class="section level6">
+<h6>Household size</h6>
+<p>"Bitte rechnen Sie hier sich selbst wieder mit ein. Wenn es eine Personengruppe nicht in Ihrem Haushalt gibt, tragen Sie bitte „0“ ein.</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>…Erwachsene über 18 Jahre:</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>…Teenager von 15-17 Jahren:</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>…Kinder von 6-14 Jahren:</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>…Kinder von 3-5 Jahren:</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>…Kinder von 0-2 Jahren:</li>
+</ol></li>
+</ul>
+<p>(Achtung, wenn Anzahl Erwachsene missing, 1 eintragen, da vorher Filterfrage)</p>
+</div>
+<div id="health" class="section level6">
+<h6>Health</h6>
+<p>“Kommen wir jetzt zu ein paar Fragen zu Ihrer Gesundheit. Wie schätzen Sie Ihren allgemeinen Gesundheitszustand ein? Würden Sie sagen, er ist…”</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>1 = Sehr gut</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>2 = Gut</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>3 = Mittelmäßig</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>4 = Schlecht</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>5 = Sehr schlecht</li>
+</ol></li>
+</ul>
+</div>
+<div id="living-space" class="section level6">
+<h6>Living space</h6>
+<p>“Wie viele Quadratmeter hat Ihre Wohnung?”</p>
+<p>(Einfach-Nennung, Zahleneingabe, min. 0 – max. 600, freiwillig)</p>
+</div>
+<div id="access-garden" class="section level6">
+<h6>Access garden</h6>
+<p>"Haben Sie Zugang zu einer privaten Freifläche (Balkon, Garten)?</p>
+<ul>
+<li>(Ja, Garten)</li>
+</ul>
+</div>
+<div id="access-balcony" class="section level6">
+<h6>Access balcony</h6>
+<p>“Haben Sie Zugang zu einer privaten Freifläche (Balkon, Garten)?”</p>
+<ul>
+<li>(Ja, Balkon)</li>
+</ul>
+</div>
+<div id="employment" class="section level6">
+<h6>Employment</h6>
+<p>Wenn Sie sich selbst zuordnen: Im Februar 2020, welcher der folgenden Gruppen gehören Sie vorwiegend an? (Einfach-Nennung)</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>Unselbstständig erwerbstätig (auch Lehrling), Privatwirtschaft</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>Unselbstständig erwerbstätig (auch Lehrling), Öffentlicher Dienst</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>Selbstständig erwerbstätig</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>Arbeitslos</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>Pensionist*in</li>
+</ol></li>
+<li><ol start="6" style="list-style-type: lower-alpha">
+<li>Ausschließlich haushaltsführend</li>
+</ol></li>
+<li><ol start="7" style="list-style-type: lower-alpha">
+<li>Schüler/in, Student/in, Bildungskarenz</li>
+</ol></li>
+<li><ol start="8" style="list-style-type: lower-alpha">
+<li>Dauerhaft arbeitsunfähig</li>
+</ol></li>
+<li><ol style="list-style-type: lower-roman">
+<li>Präsenz-/Zivildiener</li>
+</ol></li>
+<li><ol start="10" style="list-style-type: lower-alpha">
+<li>In Elternkarenz</li>
+</ol></li>
+</ul>
+</div>
+<div id="work-hours-per-week" class="section level6">
+<h6>Work hours per week</h6>
+<p>“Wie viele Stunden (inklusive Überstunden) arbeiten Sie in Ihrer Haupttätigkeit jetzt pro Woche? Wenn Sie es nicht genau wissen, genügt Ihre beste Schätzung.”</p>
+</div>
+<div id="home-office-yesno" class="section level6">
+<h6>Home-Office Yes/No</h6>
+<p>“Hat sich in Ihrer beruflichen Situation aufgrund der Corona-Krise etwas geändert? Bitte wählen Sie alles Zutreffende aus.”</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>Ich bin im Home-Office</li>
+</ol></li>
+</ul>
+</div>
+<div id="household-income" class="section level6">
+<h6>Household income</h6>
+<p>“Wie viel Geld steht Ihrem Haushalt aktuell zur Verfügung (Netto-Haushaltseinkommen inklusive Sozialleistungen, Rente usw.)? Bitte rechnen Sie Überstunden mit ein, nicht aber den 13./14. Bezug.”</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>weniger als 1.100 Euro</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>1.100 bis unter 1.500 Euro</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>1.500 bis unter 1.800 Euro</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>1.800 bis unter 2.200 Euro</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>2.200 bis unter 2.700 Euro</li>
+</ol></li>
+<li><ol start="6" style="list-style-type: lower-alpha">
+<li>2.700 bis unter 3.100 Euro</li>
+</ol></li>
+<li><ol start="7" style="list-style-type: lower-alpha">
+<li>3.100 bis unter 3.700 Euro</li>
+</ol></li>
+<li><ol start="8" style="list-style-type: lower-alpha">
+<li>3.700 bis unter 4.300 Euro</li>
+</ol></li>
+<li><ol style="list-style-type: lower-roman">
+<li>4.300 bis unter 5.500 Euro</li>
+</ol></li>
+<li><ol start="10" style="list-style-type: lower-alpha">
+<li>5.500 Euro und mehr</li>
+</ol></li>
+</ul>
+</div>
+<div id="outdoor-activities" class="section level6">
+<h6>Outdoor activities</h6>
+<p>“Haben Sie wegen folgenden Gründen in der vergangenen Woche Ihr Zuhause verlassen?”</p>
+<ul>
+<li>a: Arbeit</li>
+<li>b: Sport</li>
+<li>c: Freunde oder Verwandte treffen</li>
+<li>e: Essen einkaufen</li>
+<li>f: Haustiere ausführen</li>
+</ul>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+</div>
+<div id="satisfaction-democracy" class="section level6">
+<h6>Satisfaction Democracy</h6>
+<p>“Wie zufrieden oder unzufrieden sind Sie alles in allem mit der Demokratie, so wie sie derzeit in Österreich funktioniert?”</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>1 = Sehr zufrieden</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>2 = Eher zufrieden</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>3 = Teils-teils</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>4 = Eher unzufrieden</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>5 = Sehr unzufrieden</li>
+</ol></li>
+</ul>
+</div>
+<div id="risk-taking" class="section level6">
+<h6>Risk-taking</h6>
+<p>“Wie sehr sind Sie im Allgemeinen dazu bereit, Risiken einzugehen?”</p>
+<p>(0: gar nicht bereit; 10: sehr bereit)</p>
+</div>
+<div id="locus-of-control" class="section level6">
+<h6>Locus of Control</h6>
+<ul>
+<li>“Ich habe mein Leben selbst in der Hand.”</li>
+<li>“Wenn ich mich anstrenge, werde ich auch Erfolg haben.”</li>
+<li>“Egal ob privat oder im Beruf: Mein Leben wird zum großen Teil von anderen bestimmt.”</li>
+<li>“Meine Pläne werden oft vom Schicksal durchkreuzt.”</li>
+</ul>
+<p>(1 = Trifft voll und ganz zu; 2 = Trifft etwas zu; 3 = Trifft wenig zu; 4 = Trifft nicht zu) #### Indices</p>
+<p>All the measures above that include the label (scale) will be combined into a scale. These variables will be analyzed using CFAs. If, and only if, model fit is below the recommended thresholds, the models will be adapted to achieve sufficient fit (see below). To avoid overfitting, I will use more liberal model fit criteria (CFI &gt; .90, TLI &gt; .90, RMSEA &lt;. .10, SRMR &lt; .10). Of these final models I will export factor scores, which will be used for the subsequent analyses.</p>
+</div>
+</div>
+</div>
+<div id="analysis-plan" class="section level2">
+<h2>Analysis Plan</h2>
+<div id="statistical-models" class="section level4">
+<h4>Statistical models</h4>
+<p>The data will be analyzed using random effects within between models. The independent variables (all types of social media use) will be analyzed on a between person level (person average) and a within-person level (deviation from person average for each wave).</p>
+<p>Because the models are highly complex it is likely that they will not converge immediately. I plan the following analysis pipeline.</p>
+<p>Analysis (proceed if doesn’t converge): - REWB Frequentist Model: Random Slope for Social Media Use &amp; Covars - REWB Frequentist Model: Random Slope for Social Media Use &amp; Fixed Slope for Covars - REWB Frequentist Model: Fixed Slope for Social Media Use &amp; Fixed Slope for Covars - REWB Frequentist Model: Fixed Slope for Social Media Use &amp; Fixed Slope for Covars with standardized effects - REWB Bayesian Model - REWB Bayesian Model with standardized effects</p>
+<p>CFA: The factorial validity of the measures and the hypotheses will be tested with structural equation modeling (SEM). If Mardia’s test shows that the assumption of multivariate normality is violated, I will use the more robust Satorra-Bentler scaled and mean-adjusted test statistic (MLM) as estimator. I will test each scale in a confirmatory factor analysis. To avoid overfitting, I will use more liberal fit criteria (CFI &gt; .90, TLI &gt; .90, RMSEA &lt;. .10, SRMR &lt; .10) (Kline 2016). If model fit is below the criteria, I will first inspect modification indices, potentially allowing covariance or cross-loadings if theoretically plausible. If these changes do not yield sufficient fit, I will drop malfunctioning items. If fit is still subpar, I will conduct exploratory factor analyses (EFA) to assess the underlying factor structure. EFAs will be run using maximum likelihood estimation and oblimin rotation (Osborne and Costello 2004, 7). If more than one dimension will be revealed, I will implement bifactor model solutions. Bifactor models retain a general measure of the variable, and make it unnecessary to introduce novel (and potentially overfitted) subdimensions. If no adequate bifactor model can be found, I will proceed by deleting items with low loadings on the general factor and/or the specific factors. If also after deletion of individual items no bifactor solution should emerge, I will use a subset of the items to extract a single factor with sufficient factorial validity.</p>
+</div>
+<div id="transformations" class="section level4">
+<h4>Transformations</h4>
+<p>See list of variables.</p>
+</div>
+<div id="inference-criteria" class="section level4">
+<h4>Inference criteria</h4>
+<p>Definition of trivial effect size (SESOI)</p>
+<ul>
+<li>b &lt; .3 (life-satisfaction), b &lt; .15 (positive and negative affect)
+<ul>
+<li>If I need to use standardized effects (see above): beta &lt; .1</li>
+</ul></li>
+<li>in addition, p &lt; 5%</li>
+</ul>
+</div>
+<div id="data-exclusion" class="section level4">
+<h4>Data exclusion</h4>
+<p>I will individually check responses for patterns such as straight-lining or missing of inverted items, making sure to remove only clear cases. I will exclude respondents if they answer less than 50% of all questions.</p>
+</div>
+<div id="missing-data" class="section level4">
+<h4>Missing data</h4>
+<p>Missing responses will be imputed using predictive mean matching.</p>
+</div>
+<div id="exploratory-analysis" class="section level4">
+<h4>Exploratory analysis</h4>
+<p>I will provide additional analyses online, such as the results without control variables. These aren’t alternative results, but rather stem from procedures that I consider – at this point – to be inferior.</p>
+</div>
+</div>
+<div id="other" class="section level2">
+<h2>Other</h2>
+<p>It’s a deliberate decision not to statistically control the analyses for potential mediators, such as trust in politics, media, etc.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

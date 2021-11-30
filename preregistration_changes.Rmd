@@ -1,0 +1,19 @@
+---
+title: "Preregistration: Changes"
+output:
+  html_document:
+    toc: TRUE
+    toc_float:
+      collapsed: FALSE
+      toc_depth: 3
+---
+  
+The following changes were introduced after the preregistration.
+
+## Covariates
+
+I originally planned to include the following variables as varying covariates. I thought they were measured at several/all waves. However, upon seeing the actual data I realized this wasn't the case. I hence included them as stable covariates.
+
+This includes (a) text-based media news consumption, (b) video-based media news consumption, (c) residency is Vienna, (d) self-reported physical health, (e) living space (in squaremeter), (f) access to balcony, (g) access to garden, (h) employment status, (i) disposition to take risks, and (j) locus of control.
+
+The following variables I originally planned to include as control variables. However, their inclusion led to the deletion of too many cases/observations. I hence decided against their inclusion. This includes (a) household size, (b) work hours per week, (c) home office, (d) household income.

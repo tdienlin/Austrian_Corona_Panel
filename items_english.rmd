@@ -1,0 +1,265 @@
+---
+title: "Items: English"
+output:
+  html_document:
+    toc: TRUE
+    toc_float:
+      collapsed: FALSE
+      toc_depth: 3
+---
+  
+Here you can find a quick overview of all items that were measured.
+
+## Life Satisfaction
+
+"Taken everything together, how satisfied are you currently with your life?" 
+
+(0 = extremely unsatisfied, 10 = extremely satisfied)
+
+## Positive Affect (scale)
+
+"In the last week, how often did you feel"
+
+ - a: ... calm and relaxed
+ - e: ... happy
+ - i: ... full of energy
+
+(never [1]; on some days [2]; several times per week [3]; almost every day [4]; daily [5])
+
+## Negative Affect (scale)
+
+"In the last week, how often did you feel"
+
+ - b: ... lonely
+ - c: ... aggravated
+ - d: ... so depressed, that nothing could lift you up
+ - f: ... very nervous
+ - g: ... anxious
+ - h: ... glum and sad
+
+(never [1]; on some days [2]; several times per week [3]; almost every day [4]; daily [5])
+
+## Social media use
+
+"How often during the last week have you engaged in the following activities on social media?" 
+
+(1 = several times per day; 2 = daily; 3 = several times per week; 4 = weekly; 5 = never)
+
+### Reading 
+
+ - "Reading the posts of others with content on the Coronavirus."
+
+### Liking & Sharing
+
+ - "When seeing Posts on the Coronavirus, I clicked "like", "share" or "retweet".
+
+### Active Postings
+
+ - "I myself wrote posts on the Coronavirus on Social Media."
+
+### Specific platforms
+
+"How often in the last week have you followed information related to the Corona-crisis in the following social media?"
+
+ - Facebook 
+ - Twitter
+ - Instagram
+ - Youtube
+ - WhatsApp
+		
+(1 = several times per day; 2 = daily; 3 = several times per week; 4 = weekly; 5 = never)
+
+## Gender
+
+"What is your biological sex?"
+
+(a: Male; b Female; c: Diverse)
+
+## Age
+
+"In which year were you born?"
+ 
+(year)
+
+## Education
+
+"What is the highest educational degree you have earned?"
+
+ 1. No degree
+ 1. Middle school
+ 1. Vocational school
+ 1. Technical school
+ 1. High school
+ 1. Applied high school
+ 1. State college
+ 1. Bachelor
+ 1. Master
+ 1. PhD
+
+## Austria country of birth
+
+"Is Austria you country of birth?"
+
+  - Yes
+  - NO
+
+## Austria country of birth of parents
+
+ "Is Austria your parents' country of birth?"
+ 
+ - a. Yes, one parent.
+ - b. Yes, both parents.
+ - c. No.
+
+## News consumption: Text-based
+
+"Below you can find a list of different newspapers. How often during the last week have you informed yourself politically using on the these outlets (both online and offline)?"
+
+ - Kronen Zeitung or www.krone.at
+ - Der Standard or derstandard.at
+ - Die Presse or diepresse.com
+ - Österreich or oe24.at
+ - Kurier or kurier.at
+ - Salzburger Nachrichten or salzburg.at
+ - Other Austrian papers
+
+## News consumption: Video-based
+
+"Below you can find a list of different news shows in television. How often during the last week have you informed yourself politically using on the these shows?"
+
+ - "News shows on ORF (e.g., Zeit im Bild at 19:30h or ZiB 2 at 22:00h)"
+ - "News shows in private television (e.g., ATV aktuell, Puls 4/ Pro7/ Sat1 Austria)"
+
+(1 = several times per day; 2 = daily; 3 = several times per week; 4 = weekly; 5 = never)
+
+## Residency Vienna
+
+"In which county do you live currently?"
+
+ - a. Vorarlberg
+ - b. Tirol
+ - c. Salzburg
+ - d. Steiermark
+ - e. Kärnten
+ - f. Oberösterreich
+ - g. Niederösterreich
+ - h. Wien
+ - i. Burgenland
+
+(Was transformed to Vienna: yes/no)
+
+## Household size
+
+"Please include yourself into the following calculation. If one groups not present in your household, indicate "0"."
+
+ - a. ...Adults older than 18 years:
+ - b. ...Teenager between 15-17 years:
+ - c. ...Kids between 6-14 years:
+ - d. ...Kids between 3-5 years:
+ - e. ...Kids between 0-2 years:
+
+## Health
+
+"Let's next turn to some questions concerning health. How would you describe your overall health conditionas? Would you say your healt is ..."
+
+ - a. 1 = Sehr gut
+ - b. 2 = Gut
+ - c. 3 = Mittelmäßig
+ - d. 4 = Schlecht
+ - e. 5 = Sehr schlecht
+
+## Living space
+
+"How many square meteres does your appartment have?"
+
+(Number, min. 0 – max. 600, voluntary.)
+
+## Access garden
+
+"Have you got access to a private area outside?"
+
+ - (Yes, garden)
+
+## Access balcony
+
+"Have you got access to a private area outside?"
+
+ - (Yes, balcony)
+
+## Employment
+
+In Februrary 2020, what was your job situation?
+
+ 1. Unemployed
+ 1. Industrie
+ 1. Public service
+ 1. Self-employed
+ 1. Retired
+ 1. Housekeeping
+ 1. Student
+ 1. Incapacitated
+ 1. Parental Leave
+
+## Work hours per week
+
+"How many hours per week (including extra hours) do you currently work in your main job? If you don't know, please guess.
+
+(hours)
+
+## Home-Office Yes/No
+
+"Has your current job situation changed due to the Corona crisis? Please select the appropriate answer."
+
+ - a. I'm in home-office
+
+## Household income
+
+"How much income does your household currently have per month?"
+
+ - a. less than 1.100 Euro
+ - b. between 1.100 and 1.500 Euro 
+ - c. between 1.500 and 1.800 Euro 
+ - d. between 1.800 and 2.200 Euro 
+ - e. between 2.200 and 2.700 Euro 
+ - f. between 2.700 and 3.100 Euro 
+ - g. between 3.100 and 3.700 Euro 
+ - h. between 3.700 and 4.300 Euro 
+ - i. between 4.300 and 5.500 Euro 
+ - j. 5.500 Euro and more
+
+## Outdoor activities
+
+"Have you left your home during the last week for the following activity?"
+
+ - a: Work
+ - b: Sport
+ - c: Meeting friends or relatives
+ - e: Shopping
+ - f: Pets
+	
+(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])
+
+## Satisfaction Democracy
+
+"How satisfied or dissatisfied are you all in all with the democracy how it's currently working in Austria?"
+
+ - a. 1 = very satisfied
+ - b. 2 = rather satisfied
+ - c. 3 = neither nor
+ - d. 4 = rather dissatisfied 
+ - e. 5 = very dissatisfied
+
+## Risk-taking
+
+"How willing are you, in general, to take risks?"
+
+(0: not at all willing; 10: very willing)
+
+## Locus of Control 
+
+ - "I'm in control of my own life."
+ - "If I try hard, I'll have success."
+ - "Bei it in my private or professional life: My life is primarily determined by others."
+ - "My plans for life are determined by fate."
+	
+(1 = Agree completely; 2 = Agree somewhat; 3 = Disgagree somewhat; 4 = Disagree completely)

@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+.Rprofile
+.Ruserdata
+.DS_Store
+renv.lock
+
+data/10094_da_de_v4_0.zsav
+analyses_cache/*
+archive/*
+data/*
+documentation/.DS_Store
+manuscript_cache/*
+renv/*
