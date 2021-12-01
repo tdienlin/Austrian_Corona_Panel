@@ -462,13 +462,6 @@ Especially on the between-person level, altogether five effects stopped being si
 For example, using Instagram was significantly (though not meaningfully) related to increased life satisfaction.
 However, when controlling for additional covariates, the effect became virtually zero (see Figure \@ref(fig:res-channels)).
 
-```{r tab-aff-neg}
-# apa_print(model_aff_neg_lmer)
-# tab <- broom.mixed::tidy(model_aff_neg_lmer, conf.int = T) %>% 
-#  select(term, estimate, conf.low, conf.high, p.value)
-#  kable()
-```
-
 ## Exploratory Analyses
 
 In what follows, I briefly report some exploratory analyses that weren't preregistered.
