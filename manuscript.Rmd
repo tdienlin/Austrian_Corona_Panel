@@ -424,7 +424,7 @@ For example, respondents who used social media more frequently than usual to rea
 All confidence intervals included zero; hence, all effects were also statistically non-significant.
 As a result, the hypothesis was supported for all COVID-19 related types of social media communication.
 
-```{r res-activity, fig.cap="The effects of various types of social media use on three indicators of well-being. The black estimates show the effects controlled for a large number of covariates (see text; preregistered); the grey estimates are without control variables (exploratory). The SESOI was \\textit{b} = |0.30| for life satisfaction and \\textit{b} = |0.15| for affect. Hence, all of the reported effects are considered not meaningful.", out.width = "\\textwidth", cache=F}
+```{r res-activity, fig.cap="The effects of various types of social media use on three indicators of well-being. The black estimates show the effects controlled for a large number of covariates (see text; preregistered); the grey estimates are without control variables (exploratory). The SESOI was b = |0.30| for life satisfaction and b = |0.15| for affect. Hence, all of the reported effects are considered not meaningful.", out.width = "\\textwidth", cache=F}
 knitr::include_graphics("figures/fig_results_activity.pdf")
 ```
 
@@ -439,7 +439,7 @@ For example, on the between-person level, one effect stopped being significant i
 Actively posting on social media was significantly (though not meaningfully) related to decreased life satisfaction.
 However, when controlling for potential confounders, the effect became virtually zero (see Figure \@ref(fig:res-channels)).
 
-```{r res-channels, fig.cap="The effects of using various social media applications on three indicators of well-being. The black estimates show the effects controlled for a large number of covariates (see text); the grey estimates are without control variables. The SESOI was \\textit{b} = |0.30| for life satisfaction and \\textit{b} = |0.15| for affect. Hence, all of the reported effects are considered not meaningful.", out.width = "\\textwidth", cache=F}
+```{r res-channels, fig.cap="The effects of using various social media applications on three indicators of well-being. The black estimates show the effects controlled for a large number of covariates (see text); the grey estimates are without control variables. The SESOI was b = |0.30| for life satisfaction and b = |0.15| for affect. Hence, all of the reported effects are considered not meaningful.", out.width = "\\textwidth", cache=F}
 knitr::include_graphics("figures/fig_results_channel.pdf")
 ```
 
