@@ -24,7 +24,7 @@ navbar:
       href: manuscript.pdf
     - text: "Source Code"
       icon: fa-lg fa-github
-      href: https://github.com/tdienlin/Austrian_Corona_Panel_Project
+      href: https://github.com/tdienlin/Austrian_Corona_Panel
 output:
   html_document:
     theme: cosmo
