@@ -17,7 +17,7 @@ authornote: |
   Tobias Dienlin, Department of Communication, University of Vienna.
 
 abstract          : "In times of crisis such as the Corona pandemic citizens need to stay informed about recent events, the latest political decisions, or mandatory protection measures. To this end, many people use various types of media, and increasingly social media. However, because social media are particularly engaging, some find it hard to disconnect and cannot stop 'doomscrolling'. In this preregistered study, I investigate whether using social media for COVID-19 related reasons affects psychological well-being. To answer this question I analyzed data from the Austrian Corona Panel Project, which consists of 24 waves with overall 3,018 participants. I ran three random effects within between models, controlling for several stable and varying confounders. Results showed that the effects of COVID-19 related social media use on well-being were very small, arguably too small to matter. The findings suggest that fears that social media use during times of crisis impairs well-being are likely to be unfounded."
-keywords          : "COVID-19, Coronavirus, well-being, affect, life satisfaction, social media use, news use, communication, random effects within between model, panel study, longitudinal."
+keywords          : "COVID-19, Coronavirus, well-being, affect, life satisfaction, social media use, news use, communication, random effects within between model, panel study, longitudinal study."
 
 bibliography      : 
   - "bibliography/r-references.bib"
@@ -28,7 +28,7 @@ figurelist        : no
 tablelist         : no
 footnotelist      : no
 linenumbers       : yes
-mask              : yes
+mask              : no
 draft             : no
 
 documentclass     : "apa6"
