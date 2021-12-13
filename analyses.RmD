@@ -6,7 +6,7 @@ output:
     toc_float:
       collapsed: FALSE
     toc_depth: 2
-    # code_folding: hide
+    code_folding: hide
 bibliography      : 
   - "bibliography/r-references.bib"
   - "bibliography/references.bib"
@@ -17,8 +17,10 @@ bibliography      :
 ```{r knitr-setup, include=F}
 set.seed(170819)
 knitr::opts_chunk$set(warning=F, echo=T, error=F, message=F, cache = T)
-options(digits = 3, width = 200, scipen=999)
+options(digits = 3, width = 250, scipen=999)
 ```
+
+Here you can find the code and the results of all analyses. To see the code, click on button "Code". Alternatively, you can download the rmd file from the github repo.
 
 # Set-up
 
@@ -357,9 +359,6 @@ d_wide <- d_raw %>%
     loc_cntrl_int_3 = all_of(loc_cntrl_int_3),
     loc_cntrl_int_4 = all_of(loc_cntrl_int_4)
   )
-
-# rename variables
-# names(d_wide) <- sub("\\.\\.\\.", "§", names(d_wide)) # replace "..." with "_"
 ```
 
 Make new documentation with selected variables.
@@ -447,15 +446,6 @@ d_wide %<>%
     born_aus = 2 - .$born_aus,
     home_owner = 2 - .$home_owner,
     employment_fac = factor(.$employment, 
-                           # labels = c("Unselbststaendig erwerbstaetig (auch Lehrling), Privatwirtschaft",
-                           #            "Unselbststaendig erwerbstaetig (auch Lehrling), Oeffentlicher Dienst",
-                           #            "Selbststaendig erwerbstaetig",
-                           #            "Arbeitslos",
-                           #            "Pensionist*in",
-                           #            "Ausschliesslich haushaltsfuehrend",
-                           #            "Schueler/in, Student/in, Bildungskarenz",
-                           #            "Sonstiges (Dauerhaft arbeitsunfaehig oder Praesenz-/Zivildiener)",
-                           #            "In Elternkarenz")
                            labels = c("Unemployed",
                                       "Industrie",
                                       "Public service",
@@ -468,16 +458,6 @@ d_wide %<>%
                             levels = c(4, 1:3, 5:8, 10) # make unemployment reference cat
                            ),
     edu_fac = factor(.$edu,
-                     # labels = c("Volksschule oder weniger", 
-                     #            "Hauptschule oder AHS Unterstufe",
-                     #            "Polytechnikum, BMS (Fachschule, z.B. HASCH)",
-                     #            "Lehre, Berufsschule",
-                     #            "AHS mit Matura",
-                     #            "BHS mit Matura (z.B. HTL, HAK, HBLA etc.)",
-                     #            "Hochschulverwandte Lehranstalt oder Kolleg",
-                     #            "Bachelor",
-                     #            "Magister / Master / Diplomingenieur / Fachhochschule",
-                     #            "Doktor / PhD"),
                      labels = c("No degree", 
                                 "Middle school",
                                 "Vocational school",
@@ -505,14 +485,7 @@ d_long <-
   pivot_wider(names_from = "item", values_from = "value")
 ```
 
-<!-- Filter waves without data -->
-
-<!-- ```{r eval=F} -->
-<!-- d_long_test <- d_long %>% -->
-<!--   filter(!is.na(.[vars_varying])) -->
-<!-- ``` -->
-
-Recode values
+Recode values.
 
 ```{r}
 # recode such that higher values imply more strength / align with wording
@@ -543,16 +516,6 @@ Order dataset. First id, then wave.
 d_long %<>%
   arrange(id, wave)
 ```
-
-<!-- Create vectors with names -->
-
-<!-- ```{r} -->
-<!-- # create vector of names -->
-<!-- vars_varying <- names(select(d_long, "health_b":"loc_cntrl_int_4_w")) -->
-<!-- predictors_varying <- select(d_long, "health_b":"loc_cntrl_int_4_w") %>%  -->
-<!--   select(-starts_with("aff_"), -starts_with("life_")) %>%  -->
-<!--   names() -->
-<!-- ``` -->
 
 # Impute data
 
@@ -656,7 +619,7 @@ cfa_aff_pos <- cfa(model, d_long_imp, group = "wave", estimator = "MLM")
 summary(cfa_aff_pos, standardized = TRUE, fit = TRUE, estimates = FALSE)
 ```
 
-The data fit the model very well, `#td::fit_txt(cfa_aff_pos)`.
+The data fit the model very well, `r td::fit_txt(cfa_aff_pos)`.
 Let's next inspect reliability
 
 ```{r}
@@ -699,7 +662,7 @@ cfa_aff_neg <- cfa(model, d_long_imp, group = "wave", estimator = "MLM")
 summary(cfa_aff_neg, standardized = TRUE, fit = TRUE, estimates = FALSE)
 ```
 
-The data fit the model very well, `#td::fit_txt(cfa_aff_neg)`.
+The data fit the model very well, `r td::fit_txt(cfa_aff_neg)`.
 
 Let's next inspect reliability.
 
@@ -756,12 +719,6 @@ summary(model_soc_med_fb)
 ```{r}
 model_soc_med_tw <- lmer(soc_med_tw ~ (1 | id) + (1 | wave), d_long_imp)
 summary(model_soc_med_tw)
-
-# Bayesian Approach
-# model_soc_med_tw <- brm(soc_med_tw ~ (1 | id) + (1 | wave), d_long_imp
-# Also throws a warning
-# model_soc_med_tw <- brm(soc_med_tw ~ (1 | id) + (1 | wave), d_long_imp, control=list(adapt_delta=0.82))
-# Currently doesn't work, likely for lack of memory
 ```
 
 Interestingly, lme4 throws a warning, likely because there is too little variance across waves, while little variation measure itself. Let's inspect the raw means.
@@ -808,7 +765,7 @@ cfa_loc_cntrl_int <- cfa(model, filter(d_long_imp, wave != 20), group = "wave")
 summary(cfa_loc_cntrl_int, standardized = TRUE, fit = TRUE, estimates = FALSE)
 ```
 
-The data fit the model very well, `#td::fit_txt(cfa_loc_cntrl_int)`.
+The data fit the model very well, `r td::fit_txt(cfa_loc_cntrl_int)`.
 
 ## Figure
 
@@ -900,7 +857,6 @@ tab_desc_dat <- rbind(
 kable(tab_desc_dat)
 ```
 
-
 # Analyses
 ## Life satisfaction
 
@@ -969,10 +925,6 @@ model_aff_pos_lmer <- lmerTest::lmer(aff_pos_fs ~
                                         soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
                                         age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
                                         res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        # hh_income_b + # large dropout (900 obs)
-                                        # hh_adults + # too much dropout
-                                        # hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + hh_oldfam + hh_outfam + hh_partner + 
-                                        # home_owner + # too much dropout
                                         med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
                                         med_vid_orf_b + med_vid_pri_b + 
                                         risk_prop_b + loc_cntrl_int_m_b + 
@@ -1009,10 +961,6 @@ model_aff_neg_lmer <- lmerTest::lmer(aff_neg_fs ~
                                         soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
                                         age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
                                         res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        # hh_income_b + # large dropout (900 obs)
-                                        # hh_adults + # too much dropout
-                                        # hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + hh_oldfam + hh_outfam + hh_partner + 
-                                        # home_owner + # too much dropout
                                         med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
                                         med_vid_orf_b + med_vid_pri_b + 
                                         risk_prop_b + loc_cntrl_int_m_b + 

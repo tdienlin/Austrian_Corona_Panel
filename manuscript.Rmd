@@ -13,8 +13,11 @@ affiliation:
   - id            : "1"
     institution   : "University of Vienna"
 
-authornote: |
+authornote: | 
   Tobias Dienlin, Department of Communication, University of Vienna.
+
+note: |
+  Preprint submitted for publication. Please cite carefully.
 
 abstract          : "In times of crisis such as the Corona pandemic citizens need to stay informed about recent events, the latest political decisions, or mandatory protection measures. To this end, many people use various types of media, and increasingly social media. However, because social media are particularly engaging, some find it hard to disconnect and cannot stop 'doomscrolling'. In this preregistered study, I investigate whether using social media for COVID-19 related reasons affects psychological well-being. To answer this question I analyzed data from the Austrian Corona Panel Project, which consists of 24 waves with overall 3,018 participants. I ran three random effects within between models, controlling for several stable and varying confounders. Results showed that the effects of COVID-19 related social media use on well-being were very small, arguably too small to matter. The findings suggest that fears that social media use during times of crisis impairs well-being are likely to be unfounded."
 keywords          : "COVID-19, Coronavirus, well-being, affect, life satisfaction, social media use, news use, communication, random effects within between model, panel study, longitudinal study."
@@ -89,7 +92,7 @@ The panel study collected a large number of psychological and demographic variab
 <!-- Being able to control for many confounding third variables, both stable and varying, together with the longitudinal design, this creates a unique opportunity  -->
 I explicitly aimed to investigate the causal effects of COVID-19 related social media use on well-being.
 
-## Defining Well-being and Media Use
+## Understanding Well-being and Media Use
 
 The underlying theories that guided the selection of variables for my analysis are the two-continua model of mental health [@greenspoonIntegrationSubjectiveWellbeing2001] and the hierarchical taxonomy of computer-mediated communication [@meierComputermediatedCommunicationSocial2020a].
 According to the two-continua model, mental health consists of (a) psychopathology and (b) well-being.
@@ -127,7 +130,9 @@ In their study on the relations between media use and mental health during the p
 @edenMediaCopingCOVID192020 analyzed the media use of 425 US college students during the first wave of the pandemic, finding both positive and negative relations with well-being.
 In a sample of 312 respondents collected via Amazon Mechanical Turk, @choiMediatedCommunicationMatters2021 reported that people who used media to attain information were more lonely and less satisfied with their lives.
 @stainbackCOVID1924News2020 analyzed a large-scale study with 11,537 respondents from the US and found that increased COVID-19 media consumption was related to more psychological distress.
-Together, the literature emphasizes potentially negative effects of social media as news use [see also @liuRelationOfficialWhatsAppdistributed2020; @riehmAssociationsMediaExposure2020].
+A four-wave panel study with 384 young adults from the U.S. analyzed the effects of general digital technology use---objectively measured via screenshots of screen-time applications---on mental health, separating within- and between-person relations [@sewallObjectivelyMeasuredDigital2021].
+The results showed that digital technology did not have any significant effects on mental health [for a similar study with virtually identical results, see @bradleyStressMoodSmartphone2021].
+Together, the literature is mixed, with a slight focus on the negative effects of social media as news use [see also dornemannHowGoodBad2021; @liuRelationOfficialWhatsAppdistributed2020; @riehmAssociationsMediaExposure2020].
 However, note that all of these findings represent between-person relations stemming from cross-sectional data (see below).
 We therefore don't know whether the differences in mental health and well-being are due to social media use or due to other third variables, such as age, health, employment, or education.
 
@@ -151,9 +156,9 @@ In advance, there doesn't seem to be a clear winner, and it's likely that both p
 First, one could assume a _direct_ negative effect on well-being, and especially on positive or negative affect, which are more volatile and fluctuating.
 Dangers, inequalities, corruption---these were the headlines during the pandemic across many countries worldwide.
 If one learns about such events, the initial reaction might be shock, fear, or dismay.
-Repeatedly consuming such news can be depressing, perhaps even changing some general perspectives on life.
+Consuming such news can be depressing [@dornemannHowGoodBad2021], perhaps even changing some general perspectives on life.
 <!-- So, just like being hit by a hammer hurts and we don't need any "mediating mechanism", this could be the case here as well. -->
-That said, because not all news was negative, and because many people showed solidarity and compassion, there was also positive and uplifting content, potentially compensating for the negative effects.
+That said, because not all news was negative, and because many people showed solidarity and compassion, there was also positive and uplifting content, potentially compensating for the negative effects [@dornemannHowGoodBad2021].
 <!-- However, in light of a worldwide pandemic with millions of deaths, the negative direct effect seems more plausible. -->
 
 There could also be _indirect_ effects.
@@ -496,7 +501,7 @@ Other factors among the third variables that were measured revealed larger effec
 According to this study, popular fears that "doomscrolling" or overusing social media during times of crises don't seem to be justified.
 
 On the one hand, the results are not aligned with several recent studies analyzing similar or closely related research questions.
-This includes a study by @bendauAssociationsCOVID19Related2021, which showed negative relations between social media and well-being.
+This includes a study by @bendauAssociationsCOVID19Related2021, which showed negative relations between social media and well-being [but see @bradleyStressMoodSmartphone2021; or @sewallObjectivelyMeasuredDigital2021].
 However, note that @bendauAssociationsCOVID19Related2021 analyzed cross-sectional data on a between-person level while not controlling for third variables, which is not optimal for investigating causal effects.
 On the other hand, the results are well-aligned with recent studies and meta-analyses analyzing the effects of social media use from a more general perspective or from a somewhat different angle. 
 These studies have found that the effects of various types of social media use on several well-being indicators are small at best, often too small to matter [@meierComputermediatedCommunicationSocial2020a; @orbenTeenagersScreensSocial2020; @fergusonThisMetaanalysisScreen2021], which echoes the results obtained here.
@@ -580,3 +585,7 @@ All the stimuli, presentation materials, analysis scripts, and a reproducible ve
 
 The data are shared on AUSSDA, see https://doi.org/10.11587/28KQNS.
 The data can only be used for scientific purposes.
+
+# Acknowledgements
+
+I would like to thank Niklas Johannes for providing valuable feedback on this manuscript.

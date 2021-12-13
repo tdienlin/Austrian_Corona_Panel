@@ -6,7 +6,7 @@ output:
     toc_float:
       collapsed: FALSE
     toc_depth: 2
-    # code_folding: hide
+    code_folding: hide
 bibliography      : 
   - "bibliography/r-references.bib"
   - "bibliography/references.bib"
@@ -19,6 +19,8 @@ set.seed(170819)
 knitr::opts_chunk$set(warning=F, echo=T, error=F, message=F, cache = T)
 options(digits = 3, width = 200, scipen=999)
 ```
+
+Here you can find the code and the results of all additional analyses. To see the code, click on button "Code". Alternatively, you can download the rmd file from the github repo.
 
 # Set-up
 
@@ -341,6 +343,7 @@ model_aff_neg_lmer <- lmerTest::lmer(aff_neg_fs ~
 summary(model_aff_neg_lmer)
 ```
 
+Save results so that we can extract them in the manuscript.
 
 ```{r}
 save.image("data/workspace_2.RData")

@@ -33,6 +33,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -220,6 +221,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -356,7 +360,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/tdienlin/Austrian_Corona_Panel_Project">
+  <a href="https://github.com/tdienlin/Austrian_Corona_Panel">
     <span class="fa fa-lg fa-github"></span>
      
     Source Code
@@ -369,6 +373,14 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Analyses</h1>
@@ -376,19 +388,18 @@ div.tocify {
 </div>
 
 
+<p>Here you can find the code and the results of all analyses. To see the code, click on button “Code.” Alternatively, you can download the rmd file from the github repo.</p>
 <div id="set-up" class="section level1">
 <h1>Set-up</h1>
 <p>Load packages.</p>
 <pre class="r"><code># install packages
-# devtools::install_github(&quot;https://github.com/tdienlin/td&quot;)
+# devtools::install_github(&quot;https://github.com/tdienlin/td@v.0.0.2.5&quot;)
 
 # define packages
 packages &lt;- c(&quot;brms&quot;, &quot;devtools&quot;, &quot;GGally&quot;, &quot;ggplot2&quot;, 
               &quot;gridExtra&quot;, &quot;kableExtra&quot;, &quot;knitr&quot;, &quot;lavaan&quot;, &quot;lme4&quot;, 
               &quot;magrittr&quot;, &quot;mice&quot;, &quot;mvnormalTest&quot;, 
               &quot;PerFit&quot;, &quot;psych&quot;, &quot;quanteda.textstats&quot;, &quot;semTools&quot;, &quot;tidyverse&quot;)
-
-# install_github(&quot;tdienlin/td@v.0.0.2.5&quot;)  # uncomment to install
 
 # load packages
 lapply(c(packages, &quot;td&quot;), library, character.only = TRUE)</code></pre>
@@ -670,10 +681,7 @@ loc_cntrl_int_4 &lt;- find_var(&quot;Psychologie: Schicksal&quot;)</code></pre>
     loc_cntrl_int_2 = all_of(loc_cntrl_int_2),
     loc_cntrl_int_3 = all_of(loc_cntrl_int_3),
     loc_cntrl_int_4 = all_of(loc_cntrl_int_4)
-  )
-
-# rename variables
-# names(d_wide) &lt;- sub(&quot;\\.\\.\\.&quot;, &quot;§&quot;, names(d_wide)) # replace &quot;...&quot; with &quot;_&quot;</code></pre>
+  )</code></pre>
 <p>Make new documentation with selected variables.</p>
 <pre class="r"><code>doc_selected &lt;- filter(doc, variable %in% c(
   &quot;RESPID&quot;,
@@ -753,15 +761,6 @@ loc_cntrl_int_4 &lt;- find_var(&quot;Psychologie: Schicksal&quot;)</code></pre>
     born_aus = 2 - .$born_aus,
     home_owner = 2 - .$home_owner,
     employment_fac = factor(.$employment, 
-                           # labels = c(&quot;Unselbststaendig erwerbstaetig (auch Lehrling), Privatwirtschaft&quot;,
-                           #            &quot;Unselbststaendig erwerbstaetig (auch Lehrling), Oeffentlicher Dienst&quot;,
-                           #            &quot;Selbststaendig erwerbstaetig&quot;,
-                           #            &quot;Arbeitslos&quot;,
-                           #            &quot;Pensionist*in&quot;,
-                           #            &quot;Ausschliesslich haushaltsfuehrend&quot;,
-                           #            &quot;Schueler/in, Student/in, Bildungskarenz&quot;,
-                           #            &quot;Sonstiges (Dauerhaft arbeitsunfaehig oder Praesenz-/Zivildiener)&quot;,
-                           #            &quot;In Elternkarenz&quot;)
                            labels = c(&quot;Unemployed&quot;,
                                       &quot;Industrie&quot;,
                                       &quot;Public service&quot;,
@@ -774,16 +773,6 @@ loc_cntrl_int_4 &lt;- find_var(&quot;Psychologie: Schicksal&quot;)</code></pre>
                             levels = c(4, 1:3, 5:8, 10) # make unemployment reference cat
                            ),
     edu_fac = factor(.$edu,
-                     # labels = c(&quot;Volksschule oder weniger&quot;, 
-                     #            &quot;Hauptschule oder AHS Unterstufe&quot;,
-                     #            &quot;Polytechnikum, BMS (Fachschule, z.B. HASCH)&quot;,
-                     #            &quot;Lehre, Berufsschule&quot;,
-                     #            &quot;AHS mit Matura&quot;,
-                     #            &quot;BHS mit Matura (z.B. HTL, HAK, HBLA etc.)&quot;,
-                     #            &quot;Hochschulverwandte Lehranstalt oder Kolleg&quot;,
-                     #            &quot;Bachelor&quot;,
-                     #            &quot;Magister / Master / Diplomingenieur / Fachhochschule&quot;,
-                     #            &quot;Doktor / PhD&quot;),
                      labels = c(&quot;No degree&quot;, 
                                 &quot;Middle school&quot;,
                                 &quot;Vocational school&quot;,
@@ -805,12 +794,7 @@ loc_cntrl_int_4 &lt;- find_var(&quot;Psychologie: Schicksal&quot;)</code></pre>
   ) %&gt;% 
   separate(item, c(&quot;item&quot;, &quot;wave&quot;), sep = &quot;\\.\\.\\.&quot;, extra = &quot;merge&quot;) %&gt;% 
   pivot_wider(names_from = &quot;item&quot;, values_from = &quot;value&quot;)</code></pre>
-<!-- Filter waves without data -->
-<!-- ```{r eval=F} -->
-<!-- d_long_test <- d_long %>% -->
-<!--   filter(!is.na(.[vars_varying])) -->
-<!-- ``` -->
-<p>Recode values</p>
+<p>Recode values.</p>
 <pre class="r"><code># recode such that higher values imply more strength / align with wording
 d_long %&lt;&gt;% 
   mutate_at(vars(med_txt_kro:med_vid_pri, health, sat_dem, soc_med_fb:soc_med_post), 
@@ -834,14 +818,6 @@ d_long %&lt;&gt;%
 <p>Order dataset. First id, then wave.</p>
 <pre class="r"><code>d_long %&lt;&gt;%
   arrange(id, wave)</code></pre>
-<!-- Create vectors with names -->
-<!-- ```{r} -->
-<!-- # create vector of names -->
-<!-- vars_varying <- names(select(d_long, "health_b":"loc_cntrl_int_4_w")) -->
-<!-- predictors_varying <- select(d_long, "health_b":"loc_cntrl_int_4_w") %>%  -->
-<!--   select(-starts_with("aff_"), -starts_with("life_")) %>%  -->
-<!--   names() -->
-<!-- ``` -->
 </div>
 <div id="impute-data" class="section level1">
 <h1>Impute data</h1>
@@ -1041,7 +1017,7 @@ summary(cfa_aff_pos, standardized = TRUE, fit = TRUE, estimates = FALSE)</code><
 ## Standardized Root Mean Square Residual:
 ## 
 ##   SRMR                                           0.012       0.012</code></pre>
-<p>The data fit the model very well, <code>#td::fit_txt(cfa_aff_pos)</code>. Let’s next inspect reliability</p>
+<p>The data fit the model very well, <span class="math inline">\(\chi^2\)</span>(46) = 63.75,  = .043, cfi = 1.00, rmsea = .02, 90% CI [&lt; .01, .03], srmr = .01. Let’s next inspect reliability</p>
 <pre class="r"><code>rel_aff_pos &lt;- get_rel(cfa_aff_pos)
 rel_aff_pos</code></pre>
 <pre><code>##   omega
@@ -1188,7 +1164,7 @@ summary(cfa_aff_neg, standardized = TRUE, fit = TRUE, estimates = FALSE)</code><
 ## Standardized Root Mean Square Residual:
 ## 
 ##   SRMR                                           0.033       0.033</code></pre>
-<p>The data fit the model very well, <code>#td::fit_txt(cfa_aff_neg)</code>.</p>
+<p>The data fit the model very well, <span class="math inline">\(\chi^2\)</span>(331) = 3205.09,  &lt; .001, cfi = .97, rmsea = .08, 90% CI [.08, .08], srmr = .03.</p>
 <p>Let’s next inspect reliability.</p>
 <pre class="r"><code>rel_aff_neg &lt;- get_rel(cfa_aff_neg)
 rel_aff_neg</code></pre>
@@ -1352,11 +1328,6 @@ summary(model_soc_med_tw)</code></pre>
 ## (Intercept)   1.3026     0.0143    90.8
 ## optimizer (nloptwrap) convergence code: 0 (OK)
 ## boundary (singular) fit: see ?isSingular</code></pre>
-<pre class="r"><code># Bayesian Approach
-# model_soc_med_tw &lt;- brm(soc_med_tw ~ (1 | id) + (1 | wave), d_long_imp
-# Also throws a warning
-# model_soc_med_tw &lt;- brm(soc_med_tw ~ (1 | id) + (1 | wave), d_long_imp, control=list(adapt_delta=0.82))
-# Currently doesn&#39;t work, likely for lack of memory</code></pre>
 <p>Interestingly, lme4 throws a warning, likely because there is too little variance across waves, while little variation measure itself. Let’s inspect the raw means.</p>
 <pre class="r"><code>soc_med_tw_m &lt;- d_long_imp %&gt;% group_by(wave) %&gt;% summarise(value = mean(soc_med_tw, na.rm = T))
 soc_med_tw_m</code></pre>
@@ -1554,7 +1525,7 @@ summary(cfa_loc_cntrl_int, standardized = TRUE, fit = TRUE, estimates = FALSE)</
 ## Standardized Root Mean Square Residual:
 ## 
 ##   SRMR                                           0.024</code></pre>
-<p>The data fit the model very well, <code>#td::fit_txt(cfa_loc_cntrl_int)</code>.</p>
+<p>The data fit the model very well, <span class="math inline">\(\chi^2\)</span>(89) = 196.41,  &lt; .001, cfi = .99, rmsea = .04, 90% CI [.03, .05], srmr = .02.</p>
 </div>
 <div id="figure" class="section level2">
 <h2>Figure</h2>
@@ -1865,8 +1836,8 @@ YouTube
                 data = d_long_imp)
 summary(model_life_sat_lmer_nco)</code></pre>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [&#39;lmerModLmerTest&#39;]
-## Formula: life_sat ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +  
-##     soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +      soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b
+## Formula: life_sat ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +      soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +  
+##     soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b
 ##    Data: d_long_imp
 ## 
 ## REML criterion at convergence: 33991
@@ -1925,12 +1896,10 @@ summary(model_life_sat_lmer_nco)</code></pre>
                                       , data = d_long_imp)
 summary(model_life_sat_lmer)</code></pre>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [&#39;lmerModLmerTest&#39;]
-## Formula: life_sat ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +  
-##     soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +      soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +  
-##     soc_med_yt_b + soc_med_tw_b + age + male + born_aus + born_aus_prnts +      edu_fac + employment_fac + health_b + res_vienna + acc_bal +  
-##     acc_gar + home_sqm + med_txt_kro_b + med_txt_sta_b + med_txt_pre_b +      med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b +  
-##     med_vid_orf_b + med_vid_pri_b + risk_prop_b + loc_cntrl_int_m_b +      act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w +  
-##     act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +      sat_dem_w + sat_dem_b
+## Formula: life_sat ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +      soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +  
+##     soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b + age + male + born_aus + born_aus_prnts +      edu_fac + employment_fac + health_b + res_vienna + acc_bal +  
+##     acc_gar + home_sqm + med_txt_kro_b + med_txt_sta_b + med_txt_pre_b +      med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b +      med_vid_orf_b + med_vid_pri_b + risk_prop_b + loc_cntrl_int_m_b +  
+##     act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w +      act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +      sat_dem_w + sat_dem_b
 ##    Data: d_long_imp
 ## 
 ## REML criterion at convergence: 32453
@@ -2029,8 +1998,8 @@ summary(model_life_sat_lmer)</code></pre>
                                       , data = d_long_imp)
 summary(model_aff_pos_lmer_nco)</code></pre>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [&#39;lmerModLmerTest&#39;]
-## Formula: aff_pos_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +  
-##     soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +      soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b
+## Formula: aff_pos_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +      soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +  
+##     soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b
 ##    Data: d_long_imp
 ## 
 ## REML criterion at convergence: 16193
@@ -2076,10 +2045,6 @@ summary(model_aff_pos_lmer_nco)</code></pre>
                                         soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
                                         age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
                                         res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        # hh_income_b + # large dropout (900 obs)
-                                        # hh_adults + # too much dropout
-                                        # hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + hh_oldfam + hh_outfam + hh_partner + 
-                                        # home_owner + # too much dropout
                                         med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
                                         med_vid_orf_b + med_vid_pri_b + 
                                         risk_prop_b + loc_cntrl_int_m_b + 
@@ -2089,12 +2054,10 @@ summary(model_aff_pos_lmer_nco)</code></pre>
                                       , data = d_long_imp)
 summary(model_aff_pos_lmer)</code></pre>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [&#39;lmerModLmerTest&#39;]
-## Formula: aff_pos_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +  
-##     soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +      soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +  
-##     soc_med_yt_b + soc_med_tw_b + age + male + born_aus + born_aus_prnts +      edu_fac + employment_fac + health_b + res_vienna + acc_bal +  
-##     acc_gar + home_sqm + med_txt_kro_b + med_txt_sta_b + med_txt_pre_b +      med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b +  
-##     med_vid_orf_b + med_vid_pri_b + risk_prop_b + loc_cntrl_int_m_b +      act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w +  
-##     act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +      sat_dem_w + sat_dem_b
+## Formula: aff_pos_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +      soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +  
+##     soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b + age + male + born_aus + born_aus_prnts +      edu_fac + employment_fac + health_b + res_vienna + acc_bal +  
+##     acc_gar + home_sqm + med_txt_kro_b + med_txt_sta_b + med_txt_pre_b +      med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b +      med_vid_orf_b + med_vid_pri_b + risk_prop_b + loc_cntrl_int_m_b +  
+##     act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w +      act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +      sat_dem_w + sat_dem_b
 ##    Data: d_long_imp
 ## 
 ## REML criterion at convergence: 14854
@@ -2193,8 +2156,8 @@ summary(model_aff_pos_lmer)</code></pre>
                                       , data = d_long_imp)
 summary(model_aff_neg_lmer_nco)</code></pre>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [&#39;lmerModLmerTest&#39;]
-## Formula: aff_neg_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +  
-##     soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +      soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b
+## Formula: aff_neg_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +      soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +  
+##     soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b
 ##    Data: d_long_imp
 ## 
 ## REML criterion at convergence: 11101
@@ -2240,10 +2203,6 @@ summary(model_aff_neg_lmer_nco)</code></pre>
                                         soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
                                         age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
                                         res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        # hh_income_b + # large dropout (900 obs)
-                                        # hh_adults + # too much dropout
-                                        # hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + hh_oldfam + hh_outfam + hh_partner + 
-                                        # home_owner + # too much dropout
                                         med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
                                         med_vid_orf_b + med_vid_pri_b + 
                                         risk_prop_b + loc_cntrl_int_m_b + 
@@ -2253,12 +2212,10 @@ summary(model_aff_neg_lmer_nco)</code></pre>
                                       , data = d_long_imp)
 summary(model_aff_neg_lmer)</code></pre>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [&#39;lmerModLmerTest&#39;]
-## Formula: aff_neg_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +  
-##     soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +      soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +  
-##     soc_med_yt_b + soc_med_tw_b + age + male + born_aus + born_aus_prnts +      edu_fac + employment_fac + health_b + res_vienna + acc_bal +  
-##     acc_gar + home_sqm + med_txt_kro_b + med_txt_sta_b + med_txt_pre_b +      med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b +  
-##     med_vid_orf_b + med_vid_pri_b + risk_prop_b + loc_cntrl_int_m_b +      act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w +  
-##     act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +      sat_dem_w + sat_dem_b
+## Formula: aff_neg_fs ~ (1 | id) + (1 | wave) + soc_med_read_w + soc_med_like_share_w +      soc_med_post_w + soc_med_fb_w + soc_med_ig_w + soc_med_wa_w +      soc_med_yt_w + soc_med_tw_w + soc_med_read_b + soc_med_like_share_b +  
+##     soc_med_post_b + soc_med_fb_b + soc_med_ig_b + soc_med_wa_b +      soc_med_yt_b + soc_med_tw_b + age + male + born_aus + born_aus_prnts +      edu_fac + employment_fac + health_b + res_vienna + acc_bal +  
+##     acc_gar + home_sqm + med_txt_kro_b + med_txt_sta_b + med_txt_pre_b +      med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b +      med_vid_orf_b + med_vid_pri_b + risk_prop_b + loc_cntrl_int_m_b +  
+##     act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w +      act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +      sat_dem_w + sat_dem_b
 ##    Data: d_long_imp
 ## 
 ## REML criterion at convergence: 9758
@@ -2431,6 +2388,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
