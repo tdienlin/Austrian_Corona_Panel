@@ -1,0 +1,32 @@
+name: "covid-19_media_use"
+output_dir: "."
+navbar:
+  title: "Home"
+  type: inverse
+  left:
+    - text: "Manuscript"
+      href: manuscript.html
+    - text: "Setup"
+      href: analyses_setup.html
+    - text: "Analyses"
+      href: analyses.html
+    - text: "Additional analyses"
+      href: analyses_additional.html
+    - text: "Items"
+      href: items_english.html
+    - text: "Items German"
+      href: items_german.html
+    - text: "Preregistration"
+      href: preregistration.html
+    - text: "Preregistration Changes"
+      href: preregistration_changes.html
+  right:
+    - text: "PDF"
+      icon: fa-file
+      href: manuscript.pdf
+    - text: "Source Code"
+      icon: fa-lg fa-github
+      href: https://github.com/XMtRa/Austrian_Corona_Panel_Project
+output:
+  html_document:
+    theme: cosmo
