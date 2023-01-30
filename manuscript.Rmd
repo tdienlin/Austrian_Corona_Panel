@@ -268,7 +268,7 @@ The hypotheses, the sample, the measures, the analyses, and the inference criter
 Because in this study I analyze data from an already existing large-scale data set, the preregistration was done prior to accessing the data.
 The preregistration was designed on the basis of the panel documentation online [@kittelAustrianCoronaPanel2020].
 In some cases, it was impossible to execute the analyses as I had originally planned, for example because some properties of the variables only became apparent when seeing the actual data.
-The most relevant deviations are reported below, and a complete list of all changes can be found in the online [companion website](https://XMtRA.github.io/Austrian_Corona_Panel_Project) (https://XMtRA.github.io/Austrian_Corona_Panel_Project).
+The most relevant deviations are reported below, and a complete list of all changes can be found in the online [companion website](https://tdienlin.github.io/Austrian_Corona_Panel) (https://tdienlin.github.io/Austrian_Corona_Panel).
 
 ## Sample
 
@@ -456,8 +456,7 @@ All variables included in the analyses presented here were used to impute missin
 
 To find out whether the inferences were robust across plausible but subordinate analyses, I conducted additional exploratory analyses. 
 I reran the analyses (a) with additional not-preregistered covariates such as trust in media or government, (b) without covariates, (c) with single imputation, and (d) without imputation.
-For more information on the analyses, a complete documentation of the models and results, and all additional analyses, see [companion website](https://XMtRA.github.io/Austrian_Corona_Panel_Project).
-<!-- The additional analyses are reported on the [companion website](https://XMtRA.github.io/Austrian_Corona_Panel_Project/analyses_additional.html). -->
+For more information on the analyses, a complete documentation of the models and results, and all additional analyses, see [companion website](https://tdienlin.github.io/Austrian_Corona_Panel).
 <!-- For example, all within-person standardized COVID-19 related types of social media use or channels were significantly smaller than $\beta$ = |.05|, again supporting that effects were negligible. -->
 
 ## Measures
@@ -785,7 +784,7 @@ I declare no competing interests.
   
 # Supplementary Material
 
-All the stimuli, presentation materials, analysis scripts, and a reproducible version of the manuscript can be found on the companion website (https://XMtRA.github.io/Austrian_Corona_Panel_Project).
+All the stimuli, presentation materials, analysis scripts, and a reproducible version of the manuscript can be found on the companion website (https://tdienlin.github.io/Austrian_Corona_Panel).
 
 # Data Accessibility Statement
 
