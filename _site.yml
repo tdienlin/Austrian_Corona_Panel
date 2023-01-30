@@ -6,6 +6,8 @@ navbar:
   left:
     - text: "Manuscript"
       href: manuscript.html
+    - text: "Setup"
+      href: analyses_setup.html
     - text: "Analyses"
       href: analyses.html
     - text: "Additional analyses"
@@ -24,7 +26,7 @@ navbar:
       href: manuscript.pdf
     - text: "Source Code"
       icon: fa-lg fa-github
-      href: https://github.com/tdienlin/Austrian_Corona_Panel
+      href: https://github.com/XMtRa/Austrian_Corona_Panel_Project
 output:
   html_document:
     theme: cosmo

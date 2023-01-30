@@ -11,10 +11,10 @@
 
 
 
-<title>No meaningful effects of COVID-19 related social media use on well-being</title>
+<title>The effects of COVID-19 related social media use on well-being</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -62,6 +62,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -82,6 +83,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -139,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -172,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -181,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -234,7 +235,7 @@ $(document).ready(function () {
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -245,6 +246,9 @@ $(document).ready(function () {
       <ul class="nav navbar-nav">
         <li>
   <a href="manuscript.html">Manuscript</a>
+</li>
+<li>
+  <a href="analyses_setup.html">Setup</a>
 </li>
 <li>
   <a href="analyses.html">Analyses</a>
@@ -274,7 +278,7 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
-  <a href="https://github.com/tdienlin/Austrian_Corona_Panel">
+  <a href="https://github.com/XMtRa/Austrian_Corona_Panel_Project">
     <span class="fa fa-lg fa-github"></span>
      
     Source Code
@@ -289,23 +293,38 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">No meaningful effects of COVID-19 related social media use on well-being</h1>
+<h1 class="title toc-ignore">The effects of COVID-19 related social
+media use on well-being</h1>
 
 </div>
 
 
-<p>On this website, you can find the companion material for the paper <em>No meaningful effects of COVID-19 related social media use on well-being</em>.</p>
+<p>On this website, you can find the companion material for the paper
+<em>The effects of COVID-19 related social media use on
+well-being</em>.</p>
 <p>You can find the following information here:</p>
 <ul>
-<li>The paper, which you can read <a href="manuscript.html">in your browser</a> or download as <a href="manuscript.pdf">pdf</a>.</li>
-<li>The detailed code and summaries of the <a href="analyses.html">analyses</a></li>
+<li>The paper, which you can read <a href="manuscript.html">in your
+browser</a> or download as <a href="manuscript.pdf">pdf</a>.</li>
+<li>The <a href="analyses_setup.html">set-up</a> for the analyses,
+including session information, custom functions, data wrangling, and
+data imputation.</li>
+<li>The detailed code and summaries of the <a
+href="analyses.html">analyses</a></li>
 <li><a href="analyses_additional.html">Additional analyses</a>.</li>
-<li>A list of the <a href="items_english.html">items translated into English</a></li>
-<li>A list of the <a href="items_german.html">original items in German</a></li>
+<li>A list of the <a href="items_english.html">items translated into
+English</a></li>
+<li>A list of the <a href="items_german.html">original items in
+German</a></li>
 <li>The <a href="preregistration.html">preregistration</a></li>
-<li>A list where I needed to <a href="preregistration_changes.Rmd">deviate</a> from the preregistration.</li>
+<li>A list where I needed to <a
+href="preregistration_changes.Rmd">deviate</a> from the
+preregistration.</li>
 </ul>
-<p>This website is produced directly from the project’s <a href="https://github.com/tdienlin/Austrian_Corona_Panel">github repository</a>. You can download the material and the data, file an issue, or submit a pull request.</p>
+<p>This website is produced directly from the project’s <a
+href="https://github.com/XMtRa/Austrian_Corona_Panel_Project">github
+repository</a>. You can download the material and the data, file an
+issue, or submit a pull request.</p>
 
 
 

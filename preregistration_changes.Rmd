@@ -14,6 +14,15 @@ The following changes were introduced after the preregistration.
 
 I originally planned to include the following variables as varying covariates. I thought they were measured at several/all waves. However, upon seeing the actual data I realized this wasn't the case. I hence included them as stable covariates.
 
-This includes (a) text-based media news consumption, (b) video-based media news consumption, (c) residency is Vienna, (d) self-reported physical health, (e) living space (in squaremeter), (f) access to balcony, (g) access to garden, (h) employment status, (i) disposition to take risks, and (j) locus of control.
+This includes residency is Vienna, self-reported physical health, living space (in squaremeter), access to balcony, access to garden, and employment status.
 
-The following variables I originally planned to include as control variables. However, their inclusion led to the deletion of too many cases/observations. I hence decided against their inclusion. This includes (a) household size, (b) work hours per week, (c) home office, (d) household income.
+## Imputation
+
+After having received feedback from colleagues who are experts on missing data analyses, I changed the imputation strategy.
+
+- Before: predictive mean matching with n = 1 data-sets; now: multiple imputation (also predictive mean matching) with n = 5 data-sets.
+- Before: remove participants with > 50% missing data; now: include all participants
+
+## Estimation
+
+Positive affect and negative affect were modeled as mean scores and not as factor scores. The reason was that it wasn't possible to extract factor scores for the data set with multiple imputation.

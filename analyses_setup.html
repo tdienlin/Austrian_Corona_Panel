@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Analyses Setup</title>
+
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="manuscript.html">Manuscript</a>
+</li>
+<li>
+  <a href="analyses_setup.html">Setup</a>
+</li>
+<li>
+  <a href="analyses.html">Analyses</a>
+</li>
+<li>
+  <a href="analyses_additional.html">Additional analyses</a>
+</li>
+<li>
+  <a href="items_english.html">Items</a>
+</li>
+<li>
+  <a href="items_german.html">Items German</a>
+</li>
+<li>
+  <a href="preregistration.html">Preregistration</a>
+</li>
+<li>
+  <a href="preregistration_changes.html">Preregistration Changes</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="manuscript.pdf">
+    <span class="fa fa-file"></span>
+     
+    PDF
+  </a>
+</li>
+<li>
+  <a href="https://github.com/XMtRa/Austrian_Corona_Panel_Project">
+    <span class="fa fa-lg fa-github"></span>
+     
+    Source Code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Analyses Setup</h1>
+
+</div>
+
+
+<ul>
+<li>Here you can find the set-up for the analyses and the results.</li>
+<li>Includes custom functions, data-wrangling, and data imputation.</li>
+<li>To see the code, click on button “Code”.</li>
+<li>Alternatively, you can download the rmd file from the github
+repo.</li>
+<li>The data are hosted on aussda. Please download them separately, to
+rerun the analyses (<a href="https://doi.org/10.11587/28KQNS"
+class="uri">https://doi.org/10.11587/28KQNS</a>).</li>
+<li>Note that this paper uses a scientific use file, which is at the
+time of writing not officially published.</li>
+</ul>
+<div id="set-up" class="section level1">
+<h1>Set-up</h1>
+<p>Load packages.</p>
+<pre class="r"><code># install packages
+# devtools::install_github(&quot;https://github.com/tdienlin/td@v.0.0.2.5&quot;)
+
+# define packages
+packages &lt;- c(&quot;broom.mixed&quot;, &quot;brms&quot;, &quot;devtools&quot;, &quot;GGally&quot;, &quot;ggplot2&quot;, 
+              &quot;gridExtra&quot;, &quot;kableExtra&quot;, &quot;knitr&quot;, &quot;lavaan&quot;, &quot;lme4&quot;, 
+              &quot;magrittr&quot;, &quot;mice&quot;, #&quot;mvnormalTest&quot;, 
+              &quot;PerFit&quot;, &quot;performance&quot;, &quot;psych&quot;, &quot;quanteda.textstats&quot;, &quot;semTools&quot;, &quot;tidyverse&quot;)
+
+# load packages
+lapply(c(packages, &quot;td&quot;), library, character.only = TRUE)</code></pre>
+<div id="session-info" class="section level2">
+<h2>Session info</h2>
+<p>Provide session info to make results reproducible.</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 4.2.2 (2022-10-31)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Ventura 13.1
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats4    stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] td_0.0.1                forcats_0.5.2           stringr_1.4.1           dplyr_1.0.10            purrr_0.3.5             readr_2.1.3             tidyr_1.2.1             tibble_3.1.8            tidyverse_1.3.2         semTools_0.5-6         
+## [11] quanteda.textstats_0.96 psych_2.2.9             performance_0.10.2      PerFit_1.4.6            mirt_1.37.1             lattice_0.20-45         ltm_1.2-0               polycor_0.8-1           msm_1.7                 MASS_7.3-58.1          
+## [21] mice_3.15.0             magrittr_2.0.3          lme4_1.1-31             Matrix_1.5-1            lavaan_0.6-12           knitr_1.41              kableExtra_1.3.4        gridExtra_2.3           GGally_2.1.2            ggplot2_3.4.0          
+## [31] devtools_2.4.5          usethis_2.1.6           brms_2.18.0             Rcpp_1.0.9              broom.mixed_0.2.9.4    
+## 
+## loaded via a namespace (and not attached):
+##   [1] coda_0.19-4           stopwords_2.3         dygraphs_1.1.1.6      data.table_1.14.6     rpart_4.1.19          inline_0.3.19         RCurl_1.98-1.9        generics_0.1.3        callr_3.7.3           future_1.29.0         nsyllable_1.0.1      
+##  [12] tzdb_0.3.0            webshot_0.5.4         xml2_1.3.3            lubridate_1.9.0       httpuv_1.6.6          StanHeaders_2.21.0-7  assertthat_0.2.1      gargle_1.2.1          xfun_0.35             hms_1.1.2             jquerylib_0.1.4      
+##  [23] bayesplot_1.10.0      evaluate_0.18         promises_1.2.0.1      fansi_1.0.3           readxl_1.4.1          dbplyr_2.2.1          igraph_1.3.5          DBI_1.1.3             htmlwidgets_1.5.4     reshape_0.8.9         tensorA_0.36.2       
+##  [34] googledrive_2.0.0     ellipsis_0.3.2        crosstalk_1.2.0       ks_1.14.0             backports_1.4.1       pbivnorm_0.6.0        insight_0.18.8        permute_0.9-7         markdown_1.4          RcppParallel_5.1.5    deldir_1.0-6         
+##  [45] vctrs_0.5.1           remotes_2.4.2         abind_1.4-5           cachem_1.0.6          withr_2.5.0           checkmate_2.1.0       vegan_2.6-4           xts_0.12.2            prettyunits_1.1.1     mclust_6.0.0          mnormt_2.1.1         
+##  [56] svglite_2.1.0         cluster_2.1.4         crayon_1.5.2          pkgconfig_2.0.3       nlme_3.1-160          pkgload_1.3.2         nnet_7.3-18           rlang_1.0.6           globals_0.16.1        lifecycle_1.0.3       miniUI_0.1.1.1       
+##  [67] colourpicker_1.2.0    modelr_0.1.10         cellranger_1.1.0      distributional_0.3.1  matrixStats_0.63.0    loo_2.5.1             boot_1.3-28           zoo_1.8-11            reprex_2.0.2          base64enc_0.1-3       processx_3.8.0       
+##  [78] googlesheets4_1.0.1   png_0.1-7             viridisLite_0.4.1     bitops_1.0-7          KernSmooth_2.23-20    parallelly_1.32.1     jpeg_0.1-9            shinystan_2.6.0       scales_1.2.1          memoise_2.0.1         plyr_1.8.8           
+##  [89] threejs_0.3.3         compiler_4.2.2        hdrcde_3.4            rstantools_2.2.0      RColorBrewer_1.1-3    cli_3.4.1             urlchecker_1.0.1      listenv_0.8.0         pbapply_1.6-0         ps_1.7.2              Brobdingnag_1.2-9    
+## [100] htmlTable_2.4.1       Formula_1.2-4         mgcv_1.8-41           tidyselect_1.2.0      stringi_1.7.8         yaml_2.3.6            latticeExtra_0.6-30   bridgesampling_1.1-2  grid_4.2.2            sass_0.4.3            fastmatch_1.1-3      
+## [111] tools_4.2.2           timechange_0.1.1      parallel_4.2.2        rstudioapi_0.14       foreign_0.8-83        GPArotation_2022.10-2 quanteda_3.2.3        posterior_1.3.1       farver_2.1.1          irtoys_0.2.2          digest_0.6.30        
+## [122] shiny_1.7.3           pracma_2.4.2          broom_1.0.1           later_1.3.0           fda_6.0.5             httr_1.4.4            Deriv_4.1.3           colorspace_2.0-3      rvest_1.0.3           fs_1.5.2              rainbow_3.7          
+## [133] splines_4.2.2         sm_2.2-5.7.1          expm_0.999-6          shinythemes_1.2.0     sessioninfo_1.2.2     systemfonts_1.0.4     xtable_1.8-4          jsonlite_1.8.3        nloptr_2.0.3          fds_1.8               rstan_2.21.7         
+## [144] dcurver_0.9.2         R6_2.5.1              profvis_0.3.7         Hmisc_4.7-2           pillar_1.8.1          htmltools_0.5.3       mime_0.12             glue_1.6.2            fastmap_1.1.0         minqa_1.2.5           DT_0.26              
+## [155] deSolve_1.34          codetools_0.2-18      pkgbuild_1.3.1        pcaPP_2.0-3           mvtnorm_1.1-3         furrr_0.3.1           utf8_1.2.2            bslib_0.4.1           gtools_3.9.3          shinyjs_2.1.0         interp_1.1-3         
+## [166] survival_3.4-0        admisc_0.30           rmarkdown_2.18        munsell_0.5.0         haven_2.5.1           reshape2_1.4.4        gtable_0.3.1</code></pre>
+</div>
+</div>
+<div id="custom-functions" class="section level1">
+<h1>Custom functions</h1>
+<div id="find_var" class="section level2">
+<h2>find_var</h2>
+<p>Find variables in dataset.</p>
+<pre class="r"><code>find_var &lt;- function(name, data = doc)(
+  # finds the variables names for an item for each wave
+  data %&gt;%
+    filter(Label == name) %&gt;%
+    select(Variable) %&gt;%
+    unlist() %&gt;%
+    set_names(sub(&quot;\\_.*&quot;, &quot;&quot;, .))
+)</code></pre>
+</div>
+<div id="get_specs" class="section level2">
+<h2>get_specs</h2>
+<p>Extract characteristics from fitted lmer models.</p>
+<pre class="r"><code>get_specs &lt;- function(model){
+  # Get mean, max, and min values
+  
+  dat &lt;- coefficients(model)$wave
+  specs &lt;- data.frame(
+    sd = attr(VarCorr(model), &quot;sc&quot;),
+    min = min(dat),
+    max = max(dat),
+    mean = mean(dat$`(Intercept)`)
+  )
+}</code></pre>
+</div>
+<div id="get_dat" class="section level2">
+<h2>get_dat</h2>
+<p>Get data from fitted lmer objects for descriptives.</p>
+<pre class="r"><code>get_dat &lt;- function(model){
+  coefficients(model)$wave %&gt;% 
+    tibble::rownames_to_column(&quot;wave&quot;) %&gt;% 
+    rename(value = &quot;(Intercept)&quot;) %&gt;% 
+    mutate(wave = as.integer(.$wave),
+           value = as.numeric(.$value)) 
+} </code></pre>
+</div>
+<div id="get_rel" class="section level2">
+<h2>get_rel</h2>
+<p>Determine average reliability for measures across waves</p>
+<pre class="r"><code>get_rel &lt;- function(data, waves=24){
+  
+  # extract average reliability from lavaan fitted cfa with several groups
+  reliability(data) %&gt;% 
+    unlist() %&gt;% 
+    matrix(5, waves) %&gt;% 
+    as.data.frame() %&gt;% 
+    set_rownames(c(&quot;alpha&quot;, &quot;omega&quot;, &quot;omega2&quot;, &quot;omega3&quot;, &quot;avevar&quot;)) %&gt;% 
+    summarise(omega = rowMeans(.[&quot;omega&quot;,])) %&gt;% 
+    return()
+}</code></pre>
+</div>
+<div id="make_graph" class="section level2">
+<h2>make_graph</h2>
+<p>Make graph of variables’ development.</p>
+<pre class="r"><code>make_graph &lt;- function(model, title, ll, ul, line = TRUE, points = TRUE, labels = FALSE, lmer=FALSE, legend=FALSE){
+
+    if(isTRUE(lmer)){
+      dat &lt;- get_dat(model)
+    } else{
+    dat &lt;- model
+  }
+    
+  graph &lt;- 
+    ggplot(dat, aes(wave, value, color = dimension)) +
+    {if(legend) theme(
+      legend.position = c(0.85, 0.8),
+      legend.title = element_blank()
+      )} + 
+    {if(!legend) theme(
+      legend.position = &quot;none&quot;
+    )} +
+    theme(axis.title.x=element_blank()) +
+    coord_cartesian(ylim = c(ll, ul)) +
+    ggtitle(title) +
+    {if(line) geom_smooth(se = FALSE, method = &#39;loess&#39;)} +
+    {if(points) geom_point()} +
+    scale_color_manual(values=c(&quot;dodgerblue3&quot;, &quot;deepskyblue2&quot;, &quot;magenta2&quot;, &quot;green2&quot;, &quot;red&quot;))
+  graph
+}</code></pre>
+</div>
+<div id="print_res" class="section level2">
+<h2>print_res</h2>
+<pre class="r"><code># print results for online material
+print_res &lt;- function(object, imputation = TRUE){
+  
+  if(isTRUE(imputation)){
+    object %&gt;% 
+      as.data.frame %&gt;% 
+      select(term, estimate, `2.5 %`, `97.5 %`, p.value) %&gt;% 
+      mutate(p.value = td::my_round(p.value, &quot;p&quot;))
+    }
+  else{
+    object %&gt;% 
+      as.data.frame %&gt;% 
+      select(term, estimate, `2.5 %` = conf.low, `97.5 %` = conf.high, p.value) %&gt;% 
+      mutate(p.value = td::my_round(p.value, &quot;p&quot;))
+  }
+}</code></pre>
+</div>
+<div id="get_dat_res" class="section level2">
+<h2>get_dat_res</h2>
+<p>Get data of lmer objects for specific results.</p>
+<pre class="r"><code># get data
+get_dat_res &lt;- function(data_aff_neg, data_aff_pos, data_life_sat, variance = &quot;within&quot;, type = &quot;channels&quot;, analysis = &quot;Standardized&quot;){
+  
+  if(isTRUE(class(data_aff_neg) == &quot;lmerModLmerTest&quot;)) {
+         dat_fig_results &lt;- 
+           broom.mixed::tidy(data_aff_neg, conf.int = T) %&gt;% 
+           mutate(dv = &quot;aff_neg&quot;) %&gt;% 
+           rbind(
+             broom.mixed::tidy(data_aff_pos, conf.int = T) %&gt;% 
+               mutate(dv = &quot;aff_pos&quot;)) %&gt;% 
+           rbind(
+             broom.mixed::tidy(data_life_sat, conf.int = T) %&gt;% 
+               mutate(dv = &quot;life_sat&quot;))
+         } else{ 
+           dat_fig_results &lt;- 
+             data_aff_neg %&gt;% 
+             mutate(dv = &quot;aff_neg&quot;) %&gt;% 
+             rbind(data_aff_pos %&gt;% 
+                   mutate(dv = &quot;aff_pos&quot;)) %&gt;% 
+             rbind(data_life_sat %&gt;% 
+                     mutate(dv = &quot;life_sat&quot;)) %&gt;% 
+           rename(conf.low = `2.5 %`, conf.high = `97.5 %`)
+           }
+  dat_fig_results %&lt;&gt;% 
+  mutate(
+    Variance = ifelse(grepl(&quot;.*_w\\&gt;&quot;, .$term), &quot;within&quot;, &quot;between&quot;),
+    iv = gsub(&quot;_(w|b)\\&gt;&quot;, &quot;&quot;, .$term)
+         ) %&gt;%
+  mutate(
+    Variance = factor(.$Variance, 
+                  levels = c(&quot;within&quot;, &quot;between&quot;)),
+    dv = factor(.$dv, 
+                levels = c(&quot;life_sat&quot;, &quot;aff_pos&quot;, &quot;aff_neg&quot;),
+                labels = c(&quot;Life satisfaction&quot;, &quot;Positive affect&quot;, &quot;Negative affect&quot;)),
+    Type = type,
+    Analysis = analysis
+  ) %&gt;% 
+  select(dv, iv, Variance, Type, Analysis, estimate, conf.low, conf.high, p.value) %&gt;% 
+    filter(Variance == variance)
+
+  # select Social Media type of activity
+  if(type == &quot;Activity&quot;) {
+    dat_fig_results %&lt;&gt;%
+    filter(iv %in% c(&quot;soc_med_read&quot;, &quot;soc_med_like_share&quot;, &quot;soc_med_post&quot;)) %&gt;% 
+    mutate(
+      iv = factor(.$iv, 
+                  levels = c(&quot;soc_med_post&quot;, &quot;soc_med_like_share&quot;, &quot;soc_med_read&quot;), 
+                  labels = c(&quot;Posting&quot;, &quot;Liking &amp; Sharing&quot;, &quot;Reading&quot;))
+    )
+  } else if(type == &quot;Channels&quot;){
+    dat_fig_results %&lt;&gt;%
+    filter(iv %in% c(&quot;soc_med_fb&quot;, &quot;soc_med_ig&quot;, &quot;soc_med_wa&quot;, &quot;soc_med_yt&quot;, &quot;soc_med_tw&quot;)) %&gt;% 
+    mutate(iv = factor(.$iv, levels = c(&quot;soc_med_yt&quot;, &quot;soc_med_wa&quot;, &quot;soc_med_ig&quot;, &quot;soc_med_tw&quot;, &quot;soc_med_fb&quot;), labels = c(&quot;YouTube&quot;, &quot;WhatsApp&quot;, &quot;Instagram&quot;, &quot;Twitter&quot;, &quot;Facebook&quot;)))
+  } else if(type == &quot;Controls&quot;){
+    dat_fig_results %&lt;&gt;%
+      filter(iv %in% c(&quot;male&quot;, &quot;health&quot;, &quot;loc_cntrl_int_m&quot;,
+                       &quot;act_spo&quot;, &quot;sat_dem&quot;, &quot;corona_pos&quot;)) %&gt;% 
+      mutate(iv = factor(.$iv, levels = c(&quot;male&quot;, &quot;health&quot;, &quot;loc_cntrl_int_m&quot;,
+                                          &quot;act_spo&quot;, &quot;sat_dem&quot;, &quot;corona_pos&quot;), 
+                         labels = c(&quot;Male&quot;, &quot;Health&quot;, &quot;Internal locus of control&quot;,
+                                    &quot;Sport&quot;, &quot;Satisfaction democracy&quot;, &quot;Corona positive&quot;)))
+  } else if(type == &quot;Living\nconditions&quot;){
+    dat_fig_results %&lt;&gt;%
+      filter(iv %in% c(&quot;health&quot;, &quot;corona_pos&quot;, &quot;work_h&quot;, &quot;work_homeoff&quot;, &quot;hh_income&quot;)) %&gt;% 
+      mutate(iv = factor(.$iv, levels = c(&quot;health&quot;, &quot;corona_pos&quot;, &quot;work_h&quot;, &quot;work_homeoff&quot;, &quot;hh_income&quot;),
+                         labels = c(&quot;Health&quot;, &quot;Corona positive&quot;, &quot;Work hours&quot;, &quot;Homeoffice&quot;, &quot;Household income&quot;)))
+  } else if(type == &quot;News\nuse&quot;){
+    dat_fig_results %&lt;&gt;%
+      filter(iv %in% c(&quot;med_txt_kro&quot;, &quot;med_txt_sta&quot;, &quot;med_txt_pre&quot;, &quot;med_txt_oes&quot;, &quot;med_txt_kur&quot;, &quot;med_txt_slz&quot;, &quot;med_txt_son&quot;, &quot;med_vid_orf&quot;, &quot;med_vid_pri&quot;)) %&gt;% 
+      mutate(iv = factor(.$iv, levels = c(&quot;med_txt_kro&quot;, &quot;med_txt_sta&quot;, &quot;med_txt_pre&quot;, &quot;med_txt_oes&quot;, &quot;med_txt_kur&quot;, &quot;med_txt_slz&quot;, &quot;med_txt_son&quot;, &quot;med_vid_orf&quot;, &quot;med_vid_pri&quot;),
+                         labels = c(&quot;Krone&quot;, &quot;Der Standard&quot;, &quot;Die Presse&quot;, &quot;Österreich&quot;, &quot;Kurier&quot;, &quot;Salzb. Nachrichten&quot;, &quot;Other&quot;, &quot;ORF&quot;, &quot;Private news&quot;)))
+  } else if(type == &quot;Outdoor\nactivities&quot;){
+    dat_fig_results %&lt;&gt;%
+      filter(iv %in% c(&quot;act_wrk&quot;, &quot;act_spo&quot;, &quot;act_frn&quot;, &quot;act_sho&quot;, &quot;act_pet&quot;)) %&gt;% 
+      mutate(iv = factor(.$iv, levels = c(&quot;act_wrk&quot;, &quot;act_spo&quot;, &quot;act_frn&quot;, &quot;act_sho&quot;, &quot;act_pet&quot;),
+                         labels = c(&quot;Working&quot;, &quot;Sports&quot;, &quot;Friends&quot;, &quot;Shopping&quot;, &quot;With pets&quot;)))
+  } else if(type == &quot;Psycho-\nlogy&quot;){
+    dat_fig_results %&lt;&gt;%
+      filter(iv %in% c(&quot;risk_prop&quot;, &quot;loc_cntrl_int_m&quot;, &quot;sat_dem&quot;)) %&gt;% 
+      mutate(iv = factor(.$iv, levels = c(&quot;risk_prop&quot;, &quot;loc_cntrl_int_m&quot;, &quot;sat_dem&quot;),
+                         labels = c(&quot;Risk taking&quot;, &quot;Internal locus of control&quot;, &quot;Satisfaction democracy&quot;)))
+  }
+  return(dat_fig_results)
+}</code></pre>
+</div>
+<div id="make_graph_res" class="section level2">
+<h2>make_graph_res</h2>
+<p>Make graph of effects</p>
+<pre class="r"><code>make_graph_res &lt;- function(data, sesoi = NULL, legend = TRUE, facet = &quot;type&quot;, title = NULL){
+  ggplot(data, aes(x = estimate, y = iv)) + 
+  scale_color_manual(values = c(&quot;black&quot;, &quot;grey75&quot;, &quot;darkcyan&quot;, &quot;deepskyblue&quot;, &quot;cornflowerblue&quot;, &quot;darkcyan&quot;, &quot;aquamarine&quot;)) +
+  geom_vline(xintercept = 0, lwd = .75, colour = &quot;darkgrey&quot;) + 
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high, color = Analysis),
+                lwd = .75, height = .2, position = position_dodge(-.7)) +
+  geom_point(aes(color = Analysis), size = 1.5, position = position_dodge(-.7)) +
+    {if(isTRUE(sesoi == &quot;est&quot;)) geom_vline(data=filter(data, dv==&quot;Life satisfaction&quot;), aes(xintercept=-.3), colour=&quot;darkgrey&quot;, linetype = &quot;dashed&quot;)} + 
+    {if(isTRUE(sesoi == &quot;est&quot;)) geom_vline(data=filter(data, dv==&quot;Life satisfaction&quot;), aes(xintercept=.3), colour=&quot;darkgrey&quot;, linetype = &quot;dashed&quot;)} + 
+    {if(isTRUE(sesoi == &quot;est&quot;)) geom_vline(data=filter(data, dv!=&quot;Life satisfaction&quot;), aes(xintercept=-.15), colour=&quot;darkgrey&quot;, linetype = &quot;dashed&quot;)} +
+    {if(isTRUE(sesoi == &quot;est&quot;)) geom_vline(data=filter(data, dv!=&quot;Life satisfaction&quot;), aes(xintercept=.15), colour=&quot;darkgrey&quot;, linetype = &quot;dashed&quot;)} +
+    {if(isTRUE(sesoi == &quot;std&quot;)) geom_vline(aes(xintercept=.1), colour=&quot;darkgrey&quot;, linetype = &quot;dashed&quot;)} + 
+    {if(isTRUE(sesoi == &quot;std&quot;)) geom_vline(aes(xintercept=-.1), colour=&quot;darkgrey&quot;, linetype = &quot;dashed&quot;)} +   
+  theme(
+    axis.title.y = element_blank(),
+    plot.title = element_text(hjust = .5),
+    panel.spacing = unit(.9, &quot;lines&quot;),
+    text = element_text(size = 12),
+    axis.text.y = element_text(hjust = 1)
+    ) +
+  {if(!is.null(title)) ggtitle(title)} +
+  {if(!isTRUE(legend)) theme(legend.position = &quot;none&quot;)} + 
+  # guides(colour = guide_legend(reverse=T)) +
+    {if(facet == &quot;type&quot;)
+      facet_grid(rows = vars(Type),
+             cols = vars(dv),
+             scales = &quot;free&quot;,
+             space = &quot;free_y&quot;)
+    } + 
+    {if(facet == &quot;analysis&quot;)
+      facet_grid(rows = vars(Variance),
+             cols = vars(dv),
+             scales = &quot;free&quot;,
+             space = &quot;free_y&quot;)
+    }
+}</code></pre>
+</div>
+<div id="get_fs" class="section level2">
+<h2>get_fs</h2>
+<p>Extract factor scores.</p>
+<pre class="r"><code>get_fs &lt;- function(model) {
+  # the aim is to get factor scores on original scaling
+  # hence export factor values for all items
+  # then compute average
+  dat_ov &lt;- lavaan::lavPredict(model, type = &quot;ov&quot;, assemble = TRUE) %&gt;% 
+    mutate(fs = rowMeans(.[1:3]))
+  return(dat_ov$fs)
+}</code></pre>
+</div>
+</div>
+<div id="data-wrangling" class="section level1">
+<h1>Data Wrangling</h1>
+<div id="load-data" class="section level2">
+<h2>Load data</h2>
+<pre class="r"><code>doc &lt;- read_csv2(&quot;data/Variable_List_w1-34.csv&quot;)
+d_raw &lt;- read_csv(&quot;data/W1-32_ACPP_V20220601.csv&quot;)</code></pre>
+</div>
+<div id="find-names" class="section level2">
+<h2>Find names</h2>
+<p>Identify the names of each item for each wave.</p>
+<pre class="r"><code># identify variable names of items, using custom function
+health &lt;- find_var(&quot;Gesundheitszustand&quot;) # wsn&#39;t collected at wave 21
+aff_neg_1 &lt;- find_var(&quot;Depressivitaet: einsam&quot;)
+aff_neg_2 &lt;- find_var(&quot;Depressivitaet: aergerlich&quot;)
+aff_neg_3 &lt;- find_var(&quot;Depressivitaet: so niedergeschlagen&quot;)
+aff_neg_4 &lt;- find_var(&quot;Depressivitaet: sehr nervoes&quot;)
+aff_neg_5 &lt;- find_var(&quot;Depressivitaet: aengstlich&quot;)
+aff_neg_6 &lt;- find_var(&quot;Depressivitaet: bedrueckt und traurig&quot;)
+aff_pos_1 &lt;- find_var(&quot;Depressivitaet: ruhig und gelassen&quot;)
+aff_pos_2 &lt;- find_var(&quot;Depressivitaet: gluecklich&quot;)
+aff_pos_3 &lt;- find_var(&quot;Depressivitaet: voller Energie&quot;)
+act_wrk &lt;- find_var(&quot;Zuhause verlassen: Arbeit&quot;)
+act_spo &lt;- find_var(&quot;Zuhause verlassen: Sport&quot;)
+act_frn &lt;- find_var(&quot;Zuhause verlassen: Freunde oder Verwandte treffen&quot;)
+act_sho &lt;- find_var(&quot;Zuhause verlassen: Essen einkaufen&quot;)
+act_pet &lt;- find_var(&quot;Zuhause verlassen: Haustier ausfuehren&quot;)
+sat_dem &lt;- find_var(&quot;Demokratiezufriedenheit: Oesterreich&quot;)
+work_h &lt;- find_var(&quot;Arbeitsstunden: Jetzt pro Woche&quot;)
+work_homeoff &lt;- find_var(&quot;Aenderung berufliche Situation: Home-Office&quot;)
+hh_income &lt;- find_var(&quot;Aktuelles Haushaltseinkommen&quot;)
+med_txt_kro &lt;- find_var(&quot;Mediennutzung: Kronen Zeitung oder www.krone.at&quot;)
+med_txt_sta &lt;- find_var(&quot;Mediennutzung: Der Standard oder derstandard.at&quot;)
+med_txt_pre &lt;- find_var(&quot;Mediennutzung: Die Presse oder diepresse.com&quot;)
+med_txt_oes &lt;- find_var(&quot;Mediennutzung: Oesterreich oder oe24.at&quot;)
+med_txt_kur &lt;- find_var(&quot;Mediennutzung: Kurier oder kurier.at&quot;)
+med_txt_slz &lt;- find_var(&quot;Mediennutzung: Salzburger Nachrichten oder salzburg.at&quot;)
+med_txt_son &lt;- find_var(&quot;Mediennutzung: Sonstige oesterreichische Tageszeitungen&quot;)
+med_vid_orf &lt;- find_var(&quot;Mediennutzung: ORF (Nachrichten)&quot;)
+med_vid_pri &lt;- find_var(&quot;Mediennutzung: Privatfernsehen (Nachrichten)&quot;)
+soc_med_fb &lt;- find_var(&quot;Soziale Medien: Facebook&quot;)
+soc_med_tw &lt;- find_var(&quot;Soziale Medien: Twitter&quot;)
+soc_med_ig &lt;- find_var(&quot;Soziale Medien: Instagram&quot;)
+soc_med_yt &lt;- find_var(&quot;Soziale Medien: Youtube&quot;)
+soc_med_wa &lt;- find_var(&quot;Soziale Medien: WhatsApp&quot;)
+soc_med_read &lt;- find_var(&quot;Soziale Medien Aktivitaet: Postings zu Corona anderer lesen&quot;)
+soc_med_like_share &lt;- find_var(&quot;Soziale Medien Aktivitaet: Postings liken, teilen oder retweeten&quot;)
+soc_med_post &lt;- find_var(&quot;Soziale Medien Aktivitaet: selber Postings zu Corona verfassen&quot;)
+life_sat &lt;- find_var(&quot;Lebenszufriedenheit&quot;)
+risk_prop &lt;- find_var(&quot;Risikobereitschaft&quot;)
+loc_cntrl_int_1 &lt;- find_var(&quot;Psychologie: habe Leben selbst in der Hand&quot;)
+loc_cntrl_int_2 &lt;- find_var(&quot;Psychologie: Belohnung durch Anstrengung&quot;)
+loc_cntrl_int_3 &lt;- find_var(&quot;Psychologie: Fremdbestimmung&quot;)
+loc_cntrl_int_4 &lt;- find_var(&quot;Psychologie: Schicksal&quot;)
+trst_media &lt;- find_var(&quot;Vertrauen: ORF&quot;)
+trst_police &lt;- find_var(&quot;Vertrauen: Polizei&quot;)
+trst_media &lt;- find_var(&quot;Vertrauen: Parlament&quot;)
+trst_hlthsec &lt;- find_var(&quot;Vertrauen: Gesundheitswesen&quot;)
+trst_gov &lt;- find_var(&quot;Vertrauen: Bundesregierung&quot;)
+trst_army &lt;- find_var(&quot;Vertrauen: Bundesheer&quot;)
+corona_pos &lt;- c(
+  find_var(&quot;Corona-Diagnose: Respondent&quot;),
+  find_var(&quot;Corona-Diagnose: Monat&quot;)
+)</code></pre>
+</div>
+<div id="select-variables" class="section level2">
+<h2>Select variables</h2>
+<pre class="r"><code>d_wide &lt;- d_raw %&gt;% 
+  select(
+    id = RESPID,
+    gender = SD_GENDER,
+    acc_bal = SD_ACCESS_BALCONY,
+    acc_gar = SD_ACCESS_GARDEN,
+    year_birth = SD_BIRTHYEAR,
+    born_aus = SD_BORN_AUSTRIA,
+    born_aus_prnts = SD_MIGR_BACKGR,
+    county = SD_BULA,
+    edu = SD_EDU,
+    employment = SD_EMPLSTATUS_FEB2020,
+    hh_adults = SD_HH_ADULTS,
+    hh_child18 = SD_HH_CHILD18,
+    hh_child17 = SD_HH_TEENS,
+    hh_child14 = SD_HH_CHILD14,
+    hh_child5 = SD_HH_CHILD5,
+    hh_child2 = SD_HH_CHILD2,
+    hh_oldfam = SD_HH_OLDERFAM,
+    hh_outfam = SD_HH_OUTERFAM,
+    hh_partner = SD_HH_PARTNER,
+    # hh_income = SD_HHINCOME_FEB2020,
+    home_sqm = SD_HOME_SQM,
+    home_owner = SD_HOMEOWNER,
+    # work_h = SD_WORKHOURS_FEB2020,
+    health = all_of(health),
+    life_sat = all_of(life_sat),
+    aff_neg_1 = all_of(aff_neg_1),
+    aff_neg_2 = all_of(aff_neg_2),
+    aff_neg_3 = all_of(aff_neg_3),
+    aff_neg_4 = all_of(aff_neg_4),
+    aff_neg_5 = all_of(aff_neg_5),
+    aff_neg_6 = all_of(aff_neg_6),
+    aff_pos_1 = all_of(aff_pos_1),
+    aff_pos_2 = all_of(aff_pos_2),
+    aff_pos_3 = all_of(aff_pos_3),
+    act_wrk = all_of(act_wrk),
+    act_spo = all_of(act_spo),
+    act_frn = all_of(act_frn),
+    act_sho = all_of(act_sho),
+    act_pet = all_of(act_pet),
+    sat_dem = all_of(sat_dem),
+    sat_dem = all_of(sat_dem),
+    work_h = all_of(work_h),
+    work_homeoff = all_of(work_homeoff),
+    hh_income = all_of(hh_income),
+    med_txt_kro = all_of(med_txt_kro),
+    med_txt_sta = all_of(med_txt_sta),
+    med_txt_pre = all_of(med_txt_pre),
+    med_txt_oes = all_of(med_txt_oes),
+    med_txt_kur = all_of(med_txt_kur),
+    med_txt_slz = all_of(med_txt_slz),
+    med_txt_son = all_of(med_txt_son),
+    med_vid_orf = all_of(med_vid_orf),
+    med_vid_pri = all_of(med_vid_pri),
+    soc_med_fb = all_of(soc_med_fb),
+    soc_med_tw = all_of(soc_med_tw),
+    soc_med_ig = all_of(soc_med_ig),
+    soc_med_yt = all_of(soc_med_yt),
+    soc_med_wa = all_of(soc_med_wa),
+    soc_med_like_share = all_of(soc_med_like_share),
+    soc_med_read = all_of(soc_med_read),
+    soc_med_post = all_of(soc_med_post),
+    risk_prop = all_of(risk_prop),
+    loc_cntrl_int_1 = all_of(loc_cntrl_int_1),
+    loc_cntrl_int_2 = all_of(loc_cntrl_int_2),
+    loc_cntrl_int_3 = all_of(loc_cntrl_int_3),
+    loc_cntrl_int_4 = all_of(loc_cntrl_int_4),
+    trst_media = all_of(trst_media),
+    trst_police = all_of(trst_police),
+    trst_media = all_of(trst_media),
+    trst_hlthsec = all_of(trst_hlthsec),
+    trst_gov = all_of(trst_gov),
+    trst_army = all_of(trst_army),
+    corona_pos = all_of(corona_pos)
+  )</code></pre>
+<p>Make new documentation with selected variables.</p>
+<pre class="r"><code>doc_selected &lt;- filter(doc, Variable %in% c(
+  &quot;RESPID&quot;,
+  &quot;SD_GENDER&quot;,
+  &quot;SD_ACCESS_BALCONY&quot;,
+  &quot;SD_ACCESS_GARDEN&quot;,
+  &quot;SD_BIRTHYEAR&quot;,
+  &quot;SD_BORN_AUSTRIA&quot;,
+  &quot;SD_MIGR_BACKGR&quot;,
+  &quot;SD_BULA&quot;,
+  &quot;SD_EDU&quot;,
+  &quot;SD_EMPLSTATUS_FEB2020&quot;,
+  &quot;SD_HH_ADULTS&quot;,
+  &quot;SD_HH_CHILD18&quot;,
+  &quot;SD_HH_TEENS&quot;,
+  &quot;SD_HH_CHILD14&quot;,
+  &quot;SD_HH_CHILD5&quot;,
+  &quot;SD_HH_CHILD2&quot;,
+  &quot;SD_HH_OLDERFAM&quot;,
+  &quot;SD_HH_OUTERFAM&quot;,
+  &quot;SD_HH_PARTNER&quot;,
+  &quot;SD_HHINCOME_FEB2020&quot;,
+  &quot;SD_HOME_SQM&quot;,
+  &quot;SD_HOMEOWNER&quot;,
+  &quot;SD_WORKHOURS_FEB2020&quot;,
+  health,
+  life_sat,
+  aff_neg_1,
+  aff_neg_2,
+  aff_neg_3,
+  aff_neg_4,
+  aff_neg_5,
+  aff_neg_6,
+  aff_pos_1,
+  aff_pos_2,
+  aff_pos_3,
+  act_wrk,
+  act_spo,
+  act_frn,
+  act_sho,
+  act_pet,
+  sat_dem,
+  work_h,
+  work_homeoff,
+  hh_income,
+  med_txt_kro,
+  med_txt_sta,
+  med_txt_pre,
+  med_txt_oes,
+  med_txt_kur,
+  med_txt_slz,
+  med_txt_son,
+  med_vid_orf,
+  med_vid_pri,
+  soc_med_fb,
+  soc_med_tw,
+  soc_med_ig,
+  soc_med_yt,
+  soc_med_wa,
+  soc_med_like_share,
+  soc_med_post,
+  soc_med_read,
+  risk_prop,
+  loc_cntrl_int_1,
+  loc_cntrl_int_2,
+  loc_cntrl_int_3,
+  loc_cntrl_int_4,
+  trst_media,
+  trst_police,
+  trst_media,
+  trst_hlthsec,
+  trst_gov,
+  trst_army,
+  corona_pos
+))
+write.csv(doc_selected, &quot;data/documentation.csv&quot;)</code></pre>
+</div>
+<div id="recode-variables" class="section level2">
+<h2>Recode variables</h2>
+<pre class="r"><code>d_wide %&lt;&gt;%
+  mutate_at(vars(everything(.)), funs(na_if(., 88))) %&gt;%
+  mutate_at(vars(everything(.)), funs(na_if(., 99))) %&gt;%
+  mutate(
+    male = 2 - .$gender,
+    age = 2021 - .$year_birth,
+    res_vienna = recode(.$county, `8` = 1L, .default = 0L,),
+    born_aus = 2 - .$born_aus,
+    home_owner = 2 - .$home_owner,
+    employment_fac = factor(.$employment, 
+                            labels = c(&quot;Unemployed&quot;,
+                                       &quot;Industrie&quot;,
+                                       &quot;Public service&quot;,
+                                       &quot;Self-employed&quot;,
+                                       &quot;Retired&quot;,
+                                       &quot;Housekeeping&quot;,
+                                       &quot;Student&quot;,
+                                       &quot;Incapacitated&quot;,
+                                       &quot;Parental Leave&quot;),
+                            levels = c(4, 1:3, 5:8, 10) # make unemployment reference cat
+    ),
+    edu_fac = factor(.$edu,
+                     labels = c(&quot;No degree&quot;, 
+                                &quot;Middle school&quot;,
+                                &quot;Vocational school&quot;,
+                                &quot;Technical school&quot;,
+                                &quot;High school&quot;,
+                                &quot;Applied high school&quot;,
+                                &quot;State college&quot;,
+                                &quot;Bachelor&quot;,
+                                &quot;Master&quot;,
+                                &quot;PhD&quot;)
+    ))</code></pre>
+</div>
+<div id="make-long-data-format" class="section level2">
+<h2>Make long data format</h2>
+<pre class="r"><code>d_long &lt;-
+  d_wide %&gt;% 
+  pivot_longer(
+    cols = health...W1:corona_pos...W32,
+    names_to = &quot;item&quot;,
+    values_to = &quot;value&quot;
+  ) %&gt;% 
+  separate(item, c(&quot;item&quot;, &quot;wave&quot;), sep = &quot;\\.\\.\\.&quot;, extra = &quot;merge&quot;) %&gt;% 
+  pivot_wider(names_from = &quot;item&quot;, values_from = &quot;value&quot;)</code></pre>
+</div>
+<div id="recode-values" class="section level2">
+<h2>Recode values</h2>
+<pre class="r"><code># recode such that higher values imply more strength / align with wording
+d_long %&lt;&gt;% 
+  mutate_at(vars(med_txt_kro:med_vid_pri, health, sat_dem, soc_med_fb:soc_med_post), 
+            funs(recode(., `1` = 5L, `2` = 4L, `3` = 3L, `4` = 2L, `5` = 1L))) %&gt;% 
+  mutate_at(vars(loc_cntrl_int_1:loc_cntrl_int_4), 
+            funs(recode(., `1` = 4L, `2` = 3L, `3` = 2L, `4` = 1L))) %&gt;% 
+  mutate_at(vars(born_aus_prnts), 
+            funs(recode(., `3` = 0L, `2` = 2L, `1` = 1L)))
+
+# recode inverted items
+d_long %&lt;&gt;%
+  mutate_at(vars(loc_cntrl_int_3, loc_cntrl_int_4), 
+            funs(recode(., `1` = 4L, `2` = 3L, `3` = 2L, `4` = 1L)))
+
+# recode other
+d_long %&lt;&gt;%
+  mutate(
+    wave = gsub(&quot;W&quot;, &quot;&quot;, .$wave) %&gt;% as.integer(),
+    id = as.integer(id)
+  )</code></pre>
+</div>
+<div id="order-dataset" class="section level2">
+<h2>Order dataset</h2>
+<pre class="r"><code>d_long %&lt;&gt;%
+  arrange(id, wave)</code></pre>
+</div>
+</div>
+<div id="impute-data" class="section level1">
+<h1>Impute data</h1>
+<p>Next we impute data. Note that the actual imputation below is
+deactivated and loaded from memory to save time.</p>
+<div id="prep" class="section level2">
+<h2>Prep</h2>
+<p>Determine amount of missingness per respondent per wave.</p>
+<pre class="r"><code>vars_used &lt;- c(&quot;life_sat&quot;, &quot;aff_pos_1&quot;, &quot;aff_pos_2&quot;, &quot;aff_pos_3&quot;, &quot;aff_neg_1&quot;, &quot;aff_neg_2&quot;, &quot;aff_neg_3&quot;, &quot;aff_neg_4&quot;, &quot;aff_neg_5&quot;, &quot;aff_neg_6&quot;, &quot;soc_med_read&quot;, &quot;soc_med_like_share&quot;, &quot;soc_med_post&quot;, &quot;soc_med_fb&quot;, &quot;soc_med_ig&quot;, &quot;soc_med_wa&quot;, &quot;soc_med_yt&quot;, &quot;soc_med_tw&quot;, &quot;age&quot;, &quot;male&quot;, &quot;born_aus&quot;, &quot;born_aus_prnts&quot;, &quot;edu_fac&quot;, &quot;employment_fac&quot;, &quot;health&quot;, &quot;res_vienna&quot;, &quot;acc_bal&quot;, &quot;acc_gar&quot;, &quot;home_sqm&quot;, &quot;med_txt_kro&quot;, &quot;med_txt_sta&quot;, &quot;med_txt_pre&quot;, &quot;med_txt_oes&quot;, &quot;med_txt_kur&quot;, &quot;med_txt_slz&quot;, &quot;med_txt_son&quot;, &quot;med_vid_orf&quot;, &quot;med_vid_pri&quot;, &quot;risk_prop&quot;, &quot;loc_cntrl_int_1&quot;, &quot;loc_cntrl_int_2&quot;, &quot;loc_cntrl_int_3&quot;, &quot;loc_cntrl_int_4&quot;, &quot;act_wrk&quot;, &quot;act_spo&quot;, &quot;act_frn&quot;, &quot;act_sho&quot;, &quot;act_pet&quot;, &quot;sat_dem&quot;, &quot;trst_media&quot;, &quot;trst_police&quot;, &quot;trst_media&quot;, &quot;trst_hlthsec&quot;, &quot;trst_gov&quot;, &quot;trst_army&quot;, &quot;corona_pos&quot;) # only include vars measured at _all_ points</code></pre>
+<p>Filter respondents with more than 50% missing data – only needed for
+analyses as originally preregistered (see additional analyses).</p>
+<pre class="r"><code>d_long_50 &lt;- 
+  d_long %&gt;% 
+  mutate(na_perc = rowSums(is.na(select(., all_of(vars_used))) / ncol(select(., all_of(vars_used))))) %&gt;% 
+  filter(na_perc &lt; .5)
+write_csv(d_long_50, &quot;data/data_50.csv&quot;)</code></pre>
+<p>Exclude social media use data, because they were measured only on
+selected waves.</p>
+<pre class="r"><code>vars_excl &lt;- c(&quot;soc_med_read&quot;, &quot;soc_med_like_share&quot;, &quot;soc_med_post&quot;, &quot;soc_med_fb&quot;, &quot;soc_med_ig&quot;, &quot;soc_med_wa&quot;, &quot;soc_med_yt&quot;, &quot;soc_med_tw&quot;)
+incl_ma &lt;- d_long %&gt;% 
+  mutate(across(.cols = everything(), .fns = is.na))
+incl_ma[vars_excl] &lt;- FALSE
+
+# now also for data where 50% missing excluded
+incl_ma_50 &lt;- d_long_50 %&gt;% 
+  mutate(across(.cols = everything(), .fns = is.na))
+incl_ma_50[vars_excl] &lt;- FALSE</code></pre>
+</div>
+<div id="single-imputation" class="section level2">
+<h2>Single imputation</h2>
+<p>For analyses as originally preregistered (see additional analyses),
+hence only participants who provided more than 50% of all data.</p>
+<pre class="r"><code>d_long_50_imp &lt;- mice(d_long_50, 
+                      method = &quot;pmm&quot;, # use predictive mean matching
+                      m = 1, maxit = 30, # only 1 imputation
+                      # where = incl_ma_50,
+                      seed = 180719, print = FALSE)
+d_long_50_imp &lt;- mice::complete(d_long_50_imp)
+write_csv(d_long_50_imp, &quot;data/data_50_imputed.csv&quot;)</code></pre>
+<p>Because CFAs aren’t evaluated with multiple imputation, impute single
+data-set. Missing data was imputed for everyone.</p>
+<pre class="r"><code>d_long_100_imp &lt;- mice(d_long, 
+                   method = &quot;pmm&quot;, # use predictive mean matching
+                   m = 1, maxit = 30, # only 1 imputation
+                   # where = incl_ma,
+                   seed = 180719, print = FALSE)
+d_long_100_imp &lt;- mice::complete(d_long_100_imp)
+write_csv(d_long_100_imp, &quot;data/data_100_imputed.csv&quot;)</code></pre>
+</div>
+<div id="multiple-imputation" class="section level2">
+<h2>Multiple Imputation</h2>
+<p>Now, multiple imputation of data-sets (5 data sets, 5 iterations),
+used for the final analyses.</p>
+<pre class="r"><code># impute missing data with multiple imputation
+d_long_100_mim_mice &lt;- mice(d_long, 
+                   method = &quot;pmm&quot;, # use predictive mean matching
+                   m = 5, maxit = 5, # 5 imputations, 5 iterations
+                   # where = incl_ma,
+                   seed = 180719, print = FALSE)
+d_long_100_mim &lt;- mice::complete(d_long_100_mim_mice, action = &quot;long&quot;, include = TRUE)
+write_csv(d_long_100_mim, &quot;data/data_100_mim.csv&quot;)</code></pre>
+</div>
+<div id="load-data-1" class="section level2">
+<h2>Load data</h2>
+<p>To increase speed, you can also load the imputed data from the
+directory</p>
+<pre class="r"><code>d_long_50_imp &lt;- read_csv(&quot;data/data_50_imputed.csv&quot;) # data where people with &gt;50% missing data were filtered
+d_long_100_imp &lt;- read_csv(&quot;data/data_100_imputed.csv&quot;) # data where all people were included
+d_long_100_mim &lt;- read_csv(&quot;data/data_100_mim.csv&quot;) # data where all people were included</code></pre>
+</div>
+</div>
+<div id="create-within-between-data" class="section level1">
+<h1>Create within-between data</h1>
+<p>First, create means for scales. Then, create mean values for each
+person (between), and unique changes per wave (within).</p>
+<pre class="r"><code>d_long_100_mim &lt;-
+  d_long_100_mim %&gt;% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_100_mim %&lt;&gt;%
+  group_by(id) %&gt;% 
+  mutate_at(vars(health:loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %&gt;% 
+  ungroup()
+
+d_long_100_mim_mice &lt;- as.mids(d_long_100_mim)</code></pre>
+<pre class="r"><code>d_long_100_imp &lt;-
+  d_long_100_imp %&gt;% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_100_imp %&lt;&gt;%
+  group_by(id) %&gt;% 
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %&gt;% 
+  ungroup()</code></pre>
+<p>And because later we want to rerun the results as originally
+preregistered, we’ll now do the same for analyses without filtered
+data.</p>
+<pre class="r"><code>d_long_50_imp &lt;-
+  d_long_50_imp %&gt;% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_50_imp %&lt;&gt;% 
+  group_by(id) %&gt;% 
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), 
+            funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %&gt;% 
+  ungroup()</code></pre>
+<p>And because later we want to rerun the results without imputed data,
+now the same for data without imputation.</p>
+<pre class="r"><code>d_long_50 %&lt;&gt;% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_50 %&lt;&gt;% 
+  group_by(id) %&gt;% 
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %&gt;% 
+  ungroup()</code></pre>
+<p>And now the same for the standardized data set.</p>
+<pre class="r"><code>d_long_100_mim_std &lt;-
+  d_long_100_mim %&gt;% 
+  group_by(.imp) %&gt;% 
+  mutate_at(vars(gender:corona_pos, -id, -wave, -gender, -male, -born_aus, -born_aus_prnts, -edu_fac, -employment_fac, -res_vienna, -acc_bal, -acc_gar), ~ c(scale(.))) %&gt;% 
+  ungroup()
+
+d_long_100_mim_std %&lt;&gt;%
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_100_mim_std %&lt;&gt;%
+  group_by(id) %&gt;%
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %&gt;%
+  ungroup()
+
+d_long_100_mim_mice_std &lt;- as.mids(d_long_100_mim_std)</code></pre>
+</div>
+<div id="save-workspace" class="section level1">
+<h1>Save workspace</h1>
+<pre class="r"><code>save.image(&quot;data/workspace_1.RData&quot;)</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

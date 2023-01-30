@@ -1,16 +1,20 @@
 .Rproj.user
 .Rhistory
 .RData
-.Rprofile
 .Ruserdata
 .DS_Store
-renv.lock
-
-data/10094_da_de_v4_0.zsav
-analyses_cache/*
 analyses_additional_cache/*
+analyses_additional_cache/html/*
+analyses_additional_cache/__packages
+analyses_additional_cache/__packages.*
+# analyses_additional_files/*
+analyses_cache/*
+analyses_setup_cache/*
 archive/*
-data/*
-documentation/.DS_Store
+data/
+figures/archive/*
 manuscript_cache/*
-renv/*
+manuscript_ica.*
+manuscript_ica_cache/*
+manuscript_ica_files/*
+title page/*

@@ -13,8 +13,8 @@
 
 <title>Items: English</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -142,11 +146,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -175,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -184,16 +192,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -316,7 +317,7 @@ div.tocify {
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -327,6 +328,9 @@ div.tocify {
       <ul class="nav navbar-nav">
         <li>
   <a href="manuscript.html">Manuscript</a>
+</li>
+<li>
+  <a href="analyses_setup.html">Setup</a>
 </li>
 <li>
   <a href="analyses.html">Analyses</a>
@@ -356,7 +360,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/tdienlin/Austrian_Corona_Panel">
+  <a href="https://github.com/XMtRa/Austrian_Corona_Panel_Project">
     <span class="fa fa-lg fa-github"></span>
      
     Source Code
@@ -376,10 +380,12 @@ div.tocify {
 </div>
 
 
-<p>Here you can find a quick overview of all items that were measured.</p>
+<p>Here you can find a quick overview of all items that were
+measured.</p>
 <div id="life-satisfaction" class="section level2">
 <h2>Life Satisfaction</h2>
-<p>“Taken everything together, how satisfied are you currently with your life?”</p>
+<p>“Taken everything together, how satisfied are you currently with your
+life?”</p>
 <p>(0 = extremely unsatisfied, 10 = extremely satisfied)</p>
 </div>
 <div id="positive-affect-scale" class="section level2">
@@ -390,7 +396,8 @@ div.tocify {
 <li>e: … happy</li>
 <li>i: … full of energy</li>
 </ul>
-<p>(never [1]; on some days [2]; several times per week [3]; almost every day [4]; daily [5])</p>
+<p>(never [1]; on some days [2]; several times per week [3]; almost
+every day [4]; daily [5])</p>
 </div>
 <div id="negative-affect-scale" class="section level2">
 <h2>Negative Affect (scale)</h2>
@@ -403,12 +410,15 @@ div.tocify {
 <li>g: … anxious</li>
 <li>h: … glum and sad</li>
 </ul>
-<p>(never [1]; on some days [2]; several times per week [3]; almost every day [4]; daily [5])</p>
+<p>(never [1]; on some days [2]; several times per week [3]; almost
+every day [4]; daily [5])</p>
 </div>
 <div id="social-media-use" class="section level2">
 <h2>Social media use</h2>
-<p>“How often during the last week have you engaged in the following activities on social media?”</p>
-<p>(1 = several times per day; 2 = daily; 3 = several times per week; 4 = weekly; 5 = never)</p>
+<p>“How often during the last week have you engaged in the following
+activities on social media?”</p>
+<p>(1 = several times per day; 2 = daily; 3 = several times per week; 4
+= weekly; 5 = never)</p>
 <div id="reading" class="section level3">
 <h3>Reading</h3>
 <ul>
@@ -418,7 +428,8 @@ div.tocify {
 <div id="liking-sharing" class="section level3">
 <h3>Liking &amp; Sharing</h3>
 <ul>
-<li>“When seeing Posts on the Coronavirus, I clicked”like“,”share" or “retweet”.</li>
+<li>“When seeing Posts on the Coronavirus, I clicked”like”, “share” or
+“retweet”.</li>
 </ul>
 </div>
 <div id="active-postings" class="section level3">
@@ -429,7 +440,8 @@ div.tocify {
 </div>
 <div id="specific-platforms" class="section level3">
 <h3>Specific platforms</h3>
-<p>“How often in the last week have you followed information related to the Corona-crisis in the following social media?”</p>
+<p>“How often in the last week have you followed information related to
+the Corona-crisis in the following social media?”</p>
 <ul>
 <li>Facebook</li>
 <li>Twitter</li>
@@ -437,7 +449,8 @@ div.tocify {
 <li>Youtube</li>
 <li>WhatsApp</li>
 </ul>
-<p>(1 = several times per day; 2 = daily; 3 = several times per week; 4 = weekly; 5 = never)</p>
+<p>(1 = several times per day; 2 = daily; 3 = several times per week; 4
+= weekly; 5 = never)</p>
 </div>
 </div>
 <div id="gender" class="section level2">
@@ -491,7 +504,9 @@ div.tocify {
 </div>
 <div id="news-consumption-text-based" class="section level2">
 <h2>News consumption: Text-based</h2>
-<p>“Below you can find a list of different newspapers. How often during the last week have you informed yourself politically using on the these outlets (both online and offline)?”</p>
+<p>“Below you can find a list of different newspapers. How often during
+the last week have you informed yourself politically using on the these
+outlets (both online and offline)?”</p>
 <ul>
 <li>Kronen Zeitung or www.krone.at</li>
 <li>Der Standard or derstandard.at</li>
@@ -504,12 +519,17 @@ div.tocify {
 </div>
 <div id="news-consumption-video-based" class="section level2">
 <h2>News consumption: Video-based</h2>
-<p>“Below you can find a list of different news shows in television. How often during the last week have you informed yourself politically using on the these shows?”</p>
+<p>“Below you can find a list of different news shows in television. How
+often during the last week have you informed yourself politically using
+on the these shows?”</p>
 <ul>
-<li>“News shows on ORF (e.g., Zeit im Bild at 19:30h or ZiB 2 at 22:00h)”</li>
-<li>“News shows in private television (e.g., ATV aktuell, Puls 4/ Pro7/ Sat1 Austria)”</li>
+<li>“News shows on ORF (e.g., Zeit im Bild at 19:30h or ZiB 2 at
+22:00h)”</li>
+<li>“News shows in private television (e.g., ATV aktuell, Puls 4/ Pro7/
+Sat1 Austria)”</li>
 </ul>
-<p>(1 = several times per day; 2 = daily; 3 = several times per week; 4 = weekly; 5 = never)</p>
+<p>(1 = several times per day; 2 = daily; 3 = several times per week; 4
+= weekly; 5 = never)</p>
 </div>
 <div id="residency-vienna" class="section level2">
 <h2>Residency Vienna</h2>
@@ -547,7 +567,8 @@ div.tocify {
 </div>
 <div id="household-size" class="section level2">
 <h2>Household size</h2>
-<p>“Please include yourself into the following calculation. If one groups not present in your household, indicate”0“.”</p>
+<p>“Please include yourself into the following calculation. If one
+groups not present in your household, indicate”0”.”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>…Adults older than 18 years:</li>
@@ -568,7 +589,9 @@ div.tocify {
 </div>
 <div id="health" class="section level2">
 <h2>Health</h2>
-<p>“Let’s next turn to some questions concerning health. How would you describe your overall health conditionas? Would you say your healt is …”</p>
+<p>“Let’s next turn to some questions concerning health. How would you
+describe your overall health conditionas? Would you say your healt is
+…”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>1 = Sehr gut</li>
@@ -623,12 +646,14 @@ div.tocify {
 </div>
 <div id="work-hours-per-week" class="section level2">
 <h2>Work hours per week</h2>
-<p>"How many hours per week (including extra hours) do you currently work in your main job? If you don’t know, please guess.</p>
+<p>“How many hours per week (including extra hours) do you currently
+work in your main job? If you don’t know, please guess.</p>
 <p>(hours)</p>
 </div>
 <div id="home-office-yesno" class="section level2">
 <h2>Home-Office Yes/No</h2>
-<p>“Has your current job situation changed due to the Corona crisis? Please select the appropriate answer.”</p>
+<p>“Has your current job situation changed due to the Corona crisis?
+Please select the appropriate answer.”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>I’m in home-office</li>
@@ -673,7 +698,8 @@ div.tocify {
 </div>
 <div id="outdoor-activities" class="section level2">
 <h2>Outdoor activities</h2>
-<p>“Have you left your home during the last week for the following activity?”</p>
+<p>“Have you left your home during the last week for the following
+activity?”</p>
 <ul>
 <li>a: Work</li>
 <li>b: Sport</li>
@@ -681,11 +707,13 @@ div.tocify {
 <li>e: Shopping</li>
 <li>f: Pets</li>
 </ul>
-<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden
+Tag [4]; täglich [5])</p>
 </div>
 <div id="satisfaction-democracy" class="section level2">
 <h2>Satisfaction Democracy</h2>
-<p>“How satisfied or dissatisfied are you all in all with the democracy how it’s currently working in Austria?”</p>
+<p>“How satisfied or dissatisfied are you all in all with the democracy
+how it’s currently working in Austria?”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>1 = very satisfied</li>
@@ -714,10 +742,12 @@ div.tocify {
 <ul>
 <li>“I’m in control of my own life.”</li>
 <li>“If I try hard, I’ll have success.”</li>
-<li>“Bei it in my private or professional life: My life is primarily determined by others.”</li>
+<li>“Bei it in my private or professional life: My life is primarily
+determined by others.”</li>
 <li>“My plans for life are determined by fate.”</li>
 </ul>
-<p>(1 = Agree completely; 2 = Agree somewhat; 3 = Disgagree somewhat; 4 = Disagree completely)</p>
+<p>(1 = Agree completely; 2 = Agree somewhat; 3 = Disgagree somewhat; 4
+= Disagree completely)</p>
 </div>
 
 

@@ -13,8 +13,8 @@
 
 <title>Items: German</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -142,11 +146,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -175,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -184,16 +192,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -316,7 +317,7 @@ div.tocify {
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -327,6 +328,9 @@ div.tocify {
       <ul class="nav navbar-nav">
         <li>
   <a href="manuscript.html">Manuscript</a>
+</li>
+<li>
+  <a href="analyses_setup.html">Setup</a>
 </li>
 <li>
   <a href="analyses.html">Analyses</a>
@@ -356,7 +360,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/tdienlin/Austrian_Corona_Panel">
+  <a href="https://github.com/XMtRa/Austrian_Corona_Panel_Project">
     <span class="fa fa-lg fa-github"></span>
      
     Source Code
@@ -376,10 +380,12 @@ div.tocify {
 </div>
 
 
-<p>Here you can find a quick overview of all items that were measured.</p>
+<p>Here you can find a quick overview of all items that were
+measured.</p>
 <div id="life-satisfaction" class="section level2">
 <h2>Life Satisfaction</h2>
-<p>“Alles in allem betrachtet, wie zufrieden sind Sie derzeit mit Ihrem Leben?”</p>
+<p>“Alles in allem betrachtet, wie zufrieden sind Sie derzeit mit Ihrem
+Leben?”</p>
 <p>(0 = äußerst unzufrieden, 10 = äußerst zufrieden)</p>
 </div>
 <div id="positive-affect-scale" class="section level2">
@@ -390,7 +396,8 @@ div.tocify {
 <li>e: … glücklich</li>
 <li>i: … voller Energie</li>
 </ul>
-<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden
+Tag [4]; täglich [5])</p>
 </div>
 <div id="negative-affect-scale" class="section level2">
 <h2>Negative Affect (scale)</h2>
@@ -403,35 +410,46 @@ div.tocify {
 <li>g: … ängstlich</li>
 <li>h: … bedrückt und traurig</li>
 </ul>
-<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden
+Tag [4]; täglich [5])</p>
 </div>
 <div id="social-media-use-reading" class="section level2">
 <h2>Social media use: Reading</h2>
-<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen Netzwerken gesetzt?”</p>
+<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen
+Netzwerken gesetzt?”</p>
 <ul>
-<li>“Postings anderer lesen, in denen es um Inhalte zum Coronavirus geht”</li>
+<li>“Postings anderer lesen, in denen es um Inhalte zum Coronavirus
+geht”</li>
 </ul>
-<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche; 4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
+<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche;
+4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
 </div>
 <div id="social-media-use-liking-sharing" class="section level2">
 <h2>Social media use: Liking &amp; Sharing</h2>
-<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen Netzwerken gesetzt?”</p>
+<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen
+Netzwerken gesetzt?”</p>
 <ul>
-<li>“Bei Postings anderer zum Coronavirus auf den „Gefällt mir“ Button drücken, „teilen“ oder „retweeten“”</li>
+<li>“Bei Postings anderer zum Coronavirus auf den „Gefällt mir“ Button
+drücken, „teilen“ oder „retweeten“”</li>
 </ul>
-<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden
+Tag [4]; täglich [5])</p>
 </div>
 <div id="social-media-use-active-postings" class="section level2">
 <h2>Social media use: Active Postings</h2>
-<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen Netzwerken gesetzt?”</p>
+<p>“Wie oft haben Sie letzte Woche die folgenden Aktivitäten in Sozialen
+Netzwerken gesetzt?”</p>
 <ul>
-<li>“Selbst Postings zum Coronavirus in Sozialen Netzwerken verfasst”</li>
+<li>“Selbst Postings zum Coronavirus in Sozialen Netzwerken
+verfasst”</li>
 </ul>
-<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden
+Tag [4]; täglich [5])</p>
 </div>
 <div id="social-media-use-specific-platforms" class="section level2">
 <h2>Social media use: Specific platforms</h2>
-<p>“Wie oft in der letzten Woche haben Sie Informationen zur Corona-Krise in den folgenden Sozialen Medien verfolgt?”</p>
+<p>“Wie oft in der letzten Woche haben Sie Informationen zur
+Corona-Krise in den folgenden Sozialen Medien verfolgt?”</p>
 <ul>
 <li>Facebook</li>
 <li>Twitter</li>
@@ -439,7 +457,8 @@ div.tocify {
 <li>Youtube</li>
 <li>WhatsApp</li>
 </ul>
-<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche; 4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
+<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche;
+4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
 </div>
 <div id="gender" class="section level2">
 <h2>Gender</h2>
@@ -453,7 +472,8 @@ div.tocify {
 </div>
 <div id="education" class="section level2">
 <h2>Education</h2>
-<p>“Was ist der höchste Schul- oder Bildungsabschluss, den Sie erreicht haben?”</p>
+<p>“Was ist der höchste Schul- oder Bildungsabschluss, den Sie erreicht
+haben?”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>Volksschule oder weniger</li>
@@ -497,7 +517,8 @@ div.tocify {
 </div>
 <div id="austria-country-of-birth-of-parents" class="section level2">
 <h2>Austria country of birth of parents</h2>
-<p>“Wurde einer oder beide Ihrer Elternteile nicht in Österreich geboren?”</p>
+<p>“Wurde einer oder beide Ihrer Elternteile nicht in Österreich
+geboren?”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>Ja, einer</li>
@@ -512,7 +533,9 @@ div.tocify {
 </div>
 <div id="news-consumption-text-based" class="section level2">
 <h2>News consumption: Text-based</h2>
-<p>“Nachstehend finden Sie eine Liste mit verschiedenen Tageszeitungen. Wie oft haben Sie sich letzte Woche über das politische Geschehen in der jeweiligen Zeitung (im Internet oder gedruckt) informiert?”</p>
+<p>“Nachstehend finden Sie eine Liste mit verschiedenen Tageszeitungen.
+Wie oft haben Sie sich letzte Woche über das politische Geschehen in der
+jeweiligen Zeitung (im Internet oder gedruckt) informiert?”</p>
 <ul>
 <li>Kronen Zeitung oder www.krone.at</li>
 <li>Der Standard oder derstandard.at</li>
@@ -525,12 +548,18 @@ div.tocify {
 </div>
 <div id="news-consumption-video-based" class="section level2">
 <h2>News consumption: Video-based</h2>
-<p>“Nachstehend finden Sie eine Liste mit verschiedenen Nachrichtensendungen im Fernsehen. Wie oft haben Sie sich letzte Woche über das politische Geschehen in den folgenden Nachrichtensendungen informiert?”</p>
+<p>“Nachstehend finden Sie eine Liste mit verschiedenen
+Nachrichtensendungen im Fernsehen. Wie oft haben Sie sich letzte Woche
+über das politische Geschehen in den folgenden Nachrichtensendungen
+informiert?”</p>
 <ul>
-<li>“Nachrichtensendungen im ORF (z.B. Zeit im Bild um 19:30h oder ZiB 2 um 22:00h)”</li>
-<li>“Nachrichtensendungen im Privatfernsehen (z.B. ATV aktuell, Puls 4/ Pro7/ Sat1 Austria)”</li>
+<li>“Nachrichtensendungen im ORF (z.B. Zeit im Bild um 19:30h oder ZiB 2
+um 22:00h)”</li>
+<li>“Nachrichtensendungen im Privatfernsehen (z.B. ATV aktuell, Puls 4/
+Pro7/ Sat1 Austria)”</li>
 </ul>
-<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche; 4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
+<p>(1 = Mehrmals täglich; 2 = Einmal täglich; 3 = Mehrmals in der Woche;
+4 = Einmal in der Woche; 5 = Gar nicht/nie)</p>
 </div>
 <div id="residency-vienna" class="section level2">
 <h2>Residency Vienna</h2>
@@ -568,7 +597,9 @@ div.tocify {
 </div>
 <div id="household-size" class="section level2">
 <h2>Household size</h2>
-<p>"Bitte rechnen Sie hier sich selbst wieder mit ein. Wenn es eine Personengruppe nicht in Ihrem Haushalt gibt, tragen Sie bitte „0“ ein.</p>
+<p>“Bitte rechnen Sie hier sich selbst wieder mit ein. Wenn es eine
+Personengruppe nicht in Ihrem Haushalt gibt, tragen Sie bitte „0“
+ein.</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>…Erwachsene über 18 Jahre:</li>
@@ -586,11 +617,14 @@ div.tocify {
 <li>…Kinder von 0-2 Jahren:</li>
 </ol></li>
 </ul>
-<p>(Achtung, wenn Anzahl Erwachsene missing, 1 eintragen, da vorher Filterfrage)</p>
+<p>(Achtung, wenn Anzahl Erwachsene missing, 1 eintragen, da vorher
+Filterfrage)</p>
 </div>
 <div id="health" class="section level2">
 <h2>Health</h2>
-<p>“Kommen wir jetzt zu ein paar Fragen zu Ihrer Gesundheit. Wie schätzen Sie Ihren allgemeinen Gesundheitszustand ein? Würden Sie sagen, er ist…”</p>
+<p>“Kommen wir jetzt zu ein paar Fragen zu Ihrer Gesundheit. Wie
+schätzen Sie Ihren allgemeinen Gesundheitszustand ein? Würden Sie sagen,
+er ist…”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>1 = Sehr gut</li>
@@ -616,7 +650,7 @@ div.tocify {
 </div>
 <div id="access-garden" class="section level2">
 <h2>Access garden</h2>
-<p>"Haben Sie Zugang zu einer privaten Freifläche (Balkon, Garten)?</p>
+<p>“Haben Sie Zugang zu einer privaten Freifläche (Balkon, Garten)?</p>
 <ul>
 <li>(Ja, Garten)</li>
 </ul>
@@ -630,13 +664,15 @@ div.tocify {
 </div>
 <div id="employment" class="section level2">
 <h2>Employment</h2>
-<p>Wenn Sie sich selbst zuordnen: Im Februar 2020, welcher der folgenden Gruppen gehören Sie vorwiegend an? (Einfach-Nennung)</p>
+<p>Wenn Sie sich selbst zuordnen: Im Februar 2020, welcher der folgenden
+Gruppen gehören Sie vorwiegend an? (Einfach-Nennung)</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>Unselbstständig erwerbstätig (auch Lehrling), Privatwirtschaft</li>
 </ol></li>
 <li><ol start="2" style="list-style-type: lower-alpha">
-<li>Unselbstständig erwerbstätig (auch Lehrling), Öffentlicher Dienst</li>
+<li>Unselbstständig erwerbstätig (auch Lehrling), Öffentlicher
+Dienst</li>
 </ol></li>
 <li><ol start="3" style="list-style-type: lower-alpha">
 <li>Selbstständig erwerbstätig</li>
@@ -666,11 +702,14 @@ div.tocify {
 </div>
 <div id="work-hours-per-week" class="section level2">
 <h2>Work hours per week</h2>
-<p>“Wie viele Stunden (inklusive Überstunden) arbeiten Sie in Ihrer Haupttätigkeit jetzt pro Woche? Wenn Sie es nicht genau wissen, genügt Ihre beste Schätzung.”</p>
+<p>“Wie viele Stunden (inklusive Überstunden) arbeiten Sie in Ihrer
+Haupttätigkeit jetzt pro Woche? Wenn Sie es nicht genau wissen, genügt
+Ihre beste Schätzung.”</p>
 </div>
 <div id="home-office-yesno" class="section level2">
 <h2>Home-Office Yes/No</h2>
-<p>“Hat sich in Ihrer beruflichen Situation aufgrund der Corona-Krise etwas geändert? Bitte wählen Sie alles Zutreffende aus.”</p>
+<p>“Hat sich in Ihrer beruflichen Situation aufgrund der Corona-Krise
+etwas geändert? Bitte wählen Sie alles Zutreffende aus.”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>Ich bin im Home-Office</li>
@@ -679,7 +718,9 @@ div.tocify {
 </div>
 <div id="household-income" class="section level2">
 <h2>Household income</h2>
-<p>“Wie viel Geld steht Ihrem Haushalt aktuell zur Verfügung (Netto-Haushaltseinkommen inklusive Sozialleistungen, Rente usw.)? Bitte rechnen Sie Überstunden mit ein, nicht aber den 13./14. Bezug.”</p>
+<p>“Wie viel Geld steht Ihrem Haushalt aktuell zur Verfügung
+(Netto-Haushaltseinkommen inklusive Sozialleistungen, Rente usw.)? Bitte
+rechnen Sie Überstunden mit ein, nicht aber den 13./14. Bezug.”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>weniger als 1.100 Euro</li>
@@ -715,7 +756,8 @@ div.tocify {
 </div>
 <div id="outdoor-activities" class="section level2">
 <h2>Outdoor activities</h2>
-<p>“Haben Sie wegen folgenden Gründen in der vergangenen Woche Ihr Zuhause verlassen?”</p>
+<p>“Haben Sie wegen folgenden Gründen in der vergangenen Woche Ihr
+Zuhause verlassen?”</p>
 <ul>
 <li>a: Arbeit</li>
 <li>b: Sport</li>
@@ -723,11 +765,13 @@ div.tocify {
 <li>e: Essen einkaufen</li>
 <li>f: Haustiere ausführen</li>
 </ul>
-<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden Tag [4]; täglich [5])</p>
+<p>(nie [1]; an manchen Tagen [2]; mehrmals die Woche [3]; beinahe jeden
+Tag [4]; täglich [5])</p>
 </div>
 <div id="satisfaction-democracy" class="section level2">
 <h2>Satisfaction Democracy</h2>
-<p>“Wie zufrieden oder unzufrieden sind Sie alles in allem mit der Demokratie, so wie sie derzeit in Österreich funktioniert?”</p>
+<p>“Wie zufrieden oder unzufrieden sind Sie alles in allem mit der
+Demokratie, so wie sie derzeit in Österreich funktioniert?”</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>1 = Sehr zufrieden</li>
@@ -748,7 +792,8 @@ div.tocify {
 </div>
 <div id="risk-taking" class="section level2">
 <h2>Risk-taking</h2>
-<p>“Wie sehr sind Sie im Allgemeinen dazu bereit, Risiken einzugehen?”</p>
+<p>“Wie sehr sind Sie im Allgemeinen dazu bereit, Risiken
+einzugehen?”</p>
 <p>(0: gar nicht bereit; 10: sehr bereit)</p>
 </div>
 <div id="locus-of-control" class="section level2">
@@ -756,10 +801,12 @@ div.tocify {
 <ul>
 <li>“Ich habe mein Leben selbst in der Hand.”</li>
 <li>“Wenn ich mich anstrenge, werde ich auch Erfolg haben.”</li>
-<li>“Egal ob privat oder im Beruf: Mein Leben wird zum großen Teil von anderen bestimmt.”</li>
+<li>“Egal ob privat oder im Beruf: Mein Leben wird zum großen Teil von
+anderen bestimmt.”</li>
 <li>“Meine Pläne werden oft vom Schicksal durchkreuzt.”</li>
 </ul>
-<p>(1 = Trifft voll und ganz zu; 2 = Trifft etwas zu; 3 = Trifft wenig zu; 4 = Trifft nicht zu)</p>
+<p>(1 = Trifft voll und ganz zu; 2 = Trifft etwas zu; 3 = Trifft wenig
+zu; 4 = Trifft nicht zu)</p>
 </div>
 
 

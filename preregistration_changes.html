@@ -13,8 +13,8 @@
 
 <title>Preregistration: Changes</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -142,11 +146,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -175,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -184,16 +192,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -316,7 +317,7 @@ div.tocify {
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -327,6 +328,9 @@ div.tocify {
       <ul class="nav navbar-nav">
         <li>
   <a href="manuscript.html">Manuscript</a>
+</li>
+<li>
+  <a href="analyses_setup.html">Setup</a>
 </li>
 <li>
   <a href="analyses.html">Analyses</a>
@@ -356,7 +360,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/tdienlin/Austrian_Corona_Panel">
+  <a href="https://github.com/XMtRa/Austrian_Corona_Panel_Project">
     <span class="fa fa-lg fa-github"></span>
      
     Source Code
@@ -379,9 +383,30 @@ div.tocify {
 <p>The following changes were introduced after the preregistration.</p>
 <div id="covariates" class="section level2">
 <h2>Covariates</h2>
-<p>I originally planned to include the following variables as varying covariates. I thought they were measured at several/all waves. However, upon seeing the actual data I realized this wasn’t the case. I hence included them as stable covariates.</p>
-<p>This includes (a) text-based media news consumption, (b) video-based media news consumption, (c) residency is Vienna, (d) self-reported physical health, (e) living space (in squaremeter), (f) access to balcony, (g) access to garden, (h) employment status, (i) disposition to take risks, and (j) locus of control.</p>
-<p>The following variables I originally planned to include as control variables. However, their inclusion led to the deletion of too many cases/observations. I hence decided against their inclusion. This includes (a) household size, (b) work hours per week, (c) home office, (d) household income.</p>
+<p>I originally planned to include the following variables as varying
+covariates. I thought they were measured at several/all waves. However,
+upon seeing the actual data I realized this wasn’t the case. I hence
+included them as stable covariates.</p>
+<p>This includes residency is Vienna, self-reported physical health,
+living space (in squaremeter), access to balcony, access to garden, and
+employment status.</p>
+</div>
+<div id="imputation" class="section level2">
+<h2>Imputation</h2>
+<p>After having received feedback from colleagues who are experts on
+missing data analyses, I changed the imputation strategy.</p>
+<ul>
+<li>Before: predictive mean matching with n = 1 data-sets; now: multiple
+imputation (also predictive mean matching) with n = 5 data-sets.</li>
+<li>Before: remove participants with &gt; 50% missing data; now: include
+all participants</li>
+</ul>
+</div>
+<div id="estimation" class="section level2">
+<h2>Estimation</h2>
+<p>Positive affect and negative affect were modeled as mean scores and
+not as factor scores. The reason was that it wasn’t possible to extract
+factor scores for the data set with multiple imputation.</p>
 </div>
 
 

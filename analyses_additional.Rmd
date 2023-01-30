@@ -7,31 +7,33 @@ output:
       collapsed: FALSE
     toc_depth: 2
     code_folding: hide
+    df_print: paged
 bibliography      : 
   - "bibliography/r-references.bib"
   - "bibliography/references.bib"
-  # pdf_document:
-  #   toc: TRUE
 ---
 
 ```{r knitr-setup, include=F}
 set.seed(170819)
-knitr::opts_chunk$set(warning=F, echo=T, error=F, message=F, cache = T)
-options(digits = 3, width = 200, scipen=999)
+knitr::opts_chunk$set(warning=F, echo=T, error=F, message=F, cache=T, max.row=20)
+options(digits=2, width=260, scipen=999)
 ```
 
-Here you can find the code and the results of all additional analyses. To see the code, click on button "Code". Alternatively, you can download the rmd file from the github repo.
+ - Here you can find the code and the results of all additional analyses. 
+ - To see a good overview of the results, I recommend you directly go down to the Figures section. 
+ - But if you're interested in how the analyses were executed, see below.
+ - To see the code, click on button "Code". Alternatively, you can download the rmd file from the github repo.
 
 # Set-up
 
-Load packages, and make repo replicable.
+Load packages.
 
-```{r r-setup, results='hide'}
+```{r r-setup, results='hide', cache=F}
 # install packages
 # devtools::install_github("https://github.com/tdienlin/td@v.0.0.2.5")
 
 # define packages
-packages <- c("brms", "devtools", "GGally", "ggplot2", 
+packages <- c("broom.mixed", "brms", "devtools", "GGally", "ggplot2", 
               "gridExtra", "kableExtra", "knitr", "lavaan", "lme4", 
               "magrittr", "mice", "mvnormalTest", 
               "PerFit", "psych", "quanteda.textstats", "semTools", "tidyverse")
@@ -40,311 +42,446 @@ packages <- c("brms", "devtools", "GGally", "ggplot2",
 lapply(c(packages, "td"), library, character.only = TRUE)
 
 # load workspace
-load("data/workspace_1.RData")
+load("data/workspace_2.RData")
 ```
 
-# Standardized results
+# With additional covariates
 
-First, create standardized dataset.
+These models include additional covariates that weren't preregistered and weren't included for theoretical reasons. These are:
+
+- Trust in ORF
+- Trust in police
+- Trust in parliament
+- Trust in health sector
+- Trust in government
+- Trust in army
+
+### Life satisfaction
 
 ```{r}
-d_long_std <- d_long_imp %>% 
-  mutate(across(c(-id, -wave, -gender, -male, -born_aus, -born_aus_prnts, -edu_fac, -employment_fac, -res_vienna, -acc_bal, -acc_gar), scale))
+model_life_sat_lmer_add <- "
+  life_sat ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+    age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+    res_vienna + acc_bal + acc_gar + home_sqm + 
+    corona_pos_b + corona_pos_w +
+    work_h_b + work_h_w +
+    work_homeoff_b +  work_homeoff_w +
+    hh_income_b + hh_income_w +
+    hh_adults + hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + 
+    hh_oldfam + hh_outfam + hh_partner +
+    home_owner +
+    med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
+    med_vid_orf_b + med_vid_pri_b + 
+    med_txt_kro_w + med_txt_sta_w + med_txt_pre_w + med_txt_oes_w + med_txt_kur_w + med_txt_slz_w + med_txt_son_w + 
+    med_vid_orf_w + med_vid_pri_w + 
+    risk_prop_b + risk_prop_w + 
+    act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+    act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+    sat_dem_w + sat_dem_b + 
+    health_w + health_b +
+    loc_cntrl_int_m_w + loc_cntrl_int_m_b +
+    trst_media_w + trst_police_w + trst_media_w + trst_hlthsec_w + trst_gov_w + trst_army_w + 
+    trst_media_b + trst_police_b + trst_media_b + trst_hlthsec_b + trst_gov_b + trst_army_b
+"
+
+fit_life_sat_lmer_add <- with(d_long_100_mim_mice, 
+                              exp = lmerTest::lmer(model_life_sat_lmer_add))
+fit_life_sat_lmer_add <- summary(pool(fit_life_sat_lmer_add), conf.int = TRUE)
+print_res(fit_life_sat_lmer_add)
 ```
 
-Then let's rerun the analyses.
+### Positive Affect
+
+```{r}
+model_aff_pos_lmer_add <- "
+  aff_pos_m ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+    age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+    res_vienna + acc_bal + acc_gar + home_sqm + 
+    corona_pos_b + corona_pos_w +
+    work_h_b + work_h_w +
+    work_homeoff_b +  work_homeoff_w +
+    hh_income_b + hh_income_w +
+    hh_adults + hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + 
+    hh_oldfam + hh_outfam + hh_partner +
+    home_owner +
+    med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
+    med_vid_orf_b + med_vid_pri_b + 
+    med_txt_kro_w + med_txt_sta_w + med_txt_pre_w + med_txt_oes_w + med_txt_kur_w + med_txt_slz_w + med_txt_son_w + 
+    med_vid_orf_w + med_vid_pri_w + 
+    risk_prop_b + risk_prop_w + 
+    act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+    act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+    sat_dem_w + sat_dem_b + 
+    health_w + health_b +
+    loc_cntrl_int_m_w + loc_cntrl_int_m_b +
+    trst_media_w + trst_police_w + trst_media_w + trst_hlthsec_w + trst_gov_w + trst_army_w + 
+    trst_media_b + trst_police_b + trst_media_b + trst_hlthsec_b + trst_gov_b + trst_army_b
+"
+
+fit_aff_pos_lmer_add <- with(d_long_100_mim_mice, 
+                              exp = lmerTest::lmer(model_aff_pos_lmer_add))
+fit_aff_pos_lmer_add <- summary(pool(fit_aff_pos_lmer_add), conf.int = TRUE)
+print_res(fit_aff_pos_lmer_add)
+```
+
+### Negative Affect
+
+```{r}
+model_aff_neg_lmer_add <- "
+  aff_neg_m ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+    age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+    res_vienna + acc_bal + acc_gar + home_sqm + 
+    corona_pos_b + corona_pos_w +
+    work_h_b + work_h_w +
+    work_homeoff_b +  work_homeoff_w +
+    hh_income_b + hh_income_w +
+    hh_adults + hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + 
+    hh_oldfam + hh_outfam + hh_partner +
+    home_owner +
+    med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
+    med_vid_orf_b + med_vid_pri_b + 
+    med_txt_kro_w + med_txt_sta_w + med_txt_pre_w + med_txt_oes_w + med_txt_kur_w + med_txt_slz_w + med_txt_son_w + 
+    med_vid_orf_w + med_vid_pri_w + 
+    risk_prop_b + risk_prop_w + 
+    act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+    act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+    sat_dem_w + sat_dem_b + 
+    health_w + health_b +
+    loc_cntrl_int_m_w + loc_cntrl_int_m_b +
+    trst_media_w + trst_police_w + trst_media_w + trst_hlthsec_w + trst_gov_w + trst_army_w + 
+    trst_media_b + trst_police_b + trst_media_b + trst_hlthsec_b + trst_gov_b + trst_army_b
+"
+
+fit_aff_neg_lmer_add <- with(d_long_100_mim_mice, 
+                              exp = lmerTest::lmer(model_aff_neg_lmer_add))
+fit_aff_neg_lmer_add <- summary(pool(fit_aff_neg_lmer_add), conf.int = TRUE)
+print_res(fit_aff_neg_lmer_add)
+```
+
+# Without control variables
+
+Let's inspect how results change when control variables are omitted.
 
 ## Life satisfaction
 
 ```{r}
-model_life_sat_lmer_std <- lmerTest::lmer(life_sat ~
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long_std)
-summary(model_life_sat_lmer_std)
-```
-
-## Positive affect
-
-```{r}
-model_aff_pos_lmer_std <- lmerTest::lmer(aff_pos_fs ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long_imp)
-summary(model_aff_pos_lmer_std)
-```
-
-## Negative Affect
-
-```{r}
-model_aff_neg_lmer_std <- lmerTest::lmer(aff_neg_fs ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long_imp)
-summary(model_aff_neg_lmer_std)
-```
-
-## Figures
-
-First, for activities.
-
-```{r}
-# make figure
-fig_results_activity_std <- make_graph_res(
-  get_dat_res(model_aff_neg_lmer_std, model_aff_pos_lmer_std, model_life_sat_lmer_std, type = "activity"),
-  sesoi = "std"
-  )
-fig_results_activity_std
-
-# safe figure
-ggsave("figures/fig_results_activity_std.pdf", 
-       width = 7, height = 4,
-       plot = fig_results_activity_std)
-```
-
-Then for channels.
-
-```{r}
-# make figure
-fig_results_channel_std <- make_graph_res(
-  get_dat_res(model_aff_neg_lmer_std, model_aff_pos_lmer_std, model_life_sat_lmer_std, type = "channel"),
-  sesoi = "std"
-  )
-fig_results_channel_std
-
-# save figure
-ggsave("figures/fig_results_channel_std.pdf", 
-       width = 7, height = 4,
-       plot = fig_results_channel_std)
-```
-
-Select control variables and make graph.
-
-```{r}
-# make figure
-fig_results_control_std <- make_graph_res(
-  get_dat_res(model_aff_neg_lmer_std, model_aff_pos_lmer_std, model_life_sat_lmer_std, type = "control"),
-  sesoi = "std"
-  )
-fig_results_control_std
-
-# save figure
-ggsave("figures/fig_results_control_std.pdf", 
-       width = 7, height = 4,
-       plot = fig_results_control_std)
-```
-
-# Results with mean scores
-
-Instead of using factor scores, in what follows I report the results with mean scores of affect. Note that the results for life satisfaction were the same, as it was measured with a single item.
-
-## Positive affect
-
-```{r}
-model_aff_pos_lmer_m <- lmerTest::lmer(aff_pos_m ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long_imp)
-summary(model_aff_pos_lmer_std)
-```
-
-The results differed only slightly, and all inferences remained the same.
-
-## Negative Affect
-
-```{r}
-model_aff_neg_lmer_m <- lmerTest::lmer(aff_neg_m ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long_imp)
-summary(model_aff_neg_lmer_std)
-```
-
-The results differed only slightly, and all inferences remained the same.
-
-# Results without imputed data
-
-We first need to export factor scores for variables without imputed data
-
-```{r}
-model <- "
-aff_pos =~ a1*aff_pos_1 + a2*aff_pos_2 + a3*aff_pos_3
+model_life_sat_lmer_nco <- "
+  life_sat ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b
 "
-cfa_aff_pos <- cfa(model, d_long, group = "wave", estimator = "MLM")
-d_long$aff_pos_fs <- get_fs(cfa_aff_pos)
-
-model <- "
-aff_neg =~ a1*aff_neg_1 + a2*aff_neg_2 + a3*aff_neg_3 + a4*aff_neg_4 + a5*aff_neg_5 + a6*aff_neg_6
-"
-cfa_aff_neg <- cfa(model, d_long, group = "wave", estimator = "MLM")
-d_long$aff_neg_fs <- get_fs(cfa_aff_neg)
-```
-
-## Life satisfaction
-
-First, without control variables.
-
-```{r}
-model_life_sat_lmer_nco <- lmerTest::lmer(life_sat ~ 
-                            (1 | id) + (1 | wave) + 
-                            soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                            soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                            soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                            soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b,
-                data = d_long)
-summary(model_life_sat_lmer_nco)
-```
-
-Now with control variables.
-
-```{r}
-model_life_sat_lmer <- lmerTest::lmer(life_sat ~
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long)
-summary(model_life_sat_lmer)
+fit_life_sat_lmer_nco <- with(d_long_100_mim_mice, exp = lmerTest::lmer(model_life_sat_lmer_nco))
+fit_life_sat_lmer_nco <- summary(pool(fit_life_sat_lmer_nco), conf.int = TRUE)
+print_res(fit_life_sat_lmer_nco)
 ```
 
 ## Positive Affect
 
-First, without control variables.
-
 ```{r}
-model_aff_pos_lmer_nco <- lmerTest::lmer(aff_pos_fs ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b
-                                      , data = d_long)
-summary(model_aff_pos_lmer_nco)
-```
-
-Now with control variables. 
-
-```{r}
-model_aff_pos_lmer <- lmerTest::lmer(aff_pos_fs ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long)
-summary(model_aff_pos_lmer)
+model_aff_pos_lmer_nco <- "
+  aff_pos_m ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b
+"
+fit_aff_pos_lmer_nco <- with(d_long_100_mim_mice, exp = lmerTest::lmer(model_aff_pos_lmer_nco))
+fit_aff_pos_lmer_nco <- summary(pool(fit_aff_pos_lmer_nco), conf.int = TRUE)
+print_res(fit_aff_pos_lmer_nco)
 ```
 
 ## Negative Affect
 
-First, without control variables. 
-
 ```{r}
-model_aff_neg_lmer_nco <- lmerTest::lmer(aff_neg_fs ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b
-                                      , data = d_long)
-summary(model_aff_neg_lmer_nco)
+model_aff_neg_lmer_nco <- "
+  aff_neg_m ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b
+"
+fit_aff_neg_lmer_nco <- with(d_long_100_mim_mice, exp = lmerTest::lmer(model_aff_neg_lmer_nco))
+fit_aff_neg_lmer_nco <- summary(pool(fit_aff_neg_lmer_nco), conf.int = TRUE)
+print_res(fit_aff_neg_lmer_nco)
 ```
 
-Then, with control variables. 
+# Preregistered
+
+Some changes were introduced because of feedback from colleagues (multiple imputation, imputation of all participants, inclusion of all variables). In what follows, please find the results as originally planned (but with some necessary deviations; for example not all preregistered variables could be included).
+
+ - Use data-set in which participants with >50% data were removed. 
+ - Also use factor scores (possible without multiple imputation).
+ 
+Note that because here no multiple imputation was used, output looks differently.
+
+## Life satisfaction
 
 ```{r}
-model_aff_neg_lmer <- lmerTest::lmer(aff_neg_fs ~ 
-                                        (1 | id) + (1 | wave) + 
-                                        soc_med_read_w + soc_med_like_share_w + soc_med_post_w + 
-                                        soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
-                                        soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
-                                        soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
-                                        age + male + born_aus + born_aus_prnts + edu_fac + employment_fac + health_b + 
-                                        res_vienna + acc_bal + acc_gar + home_sqm + 
-                                        med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
-                                        med_vid_orf_b + med_vid_pri_b + 
-                                        risk_prop_b + loc_cntrl_int_m_b + 
-                                        act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
-                                        act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
-                                        sat_dem_w + sat_dem_b 
-                                      , data = d_long)
-summary(model_aff_neg_lmer)
+model_life_sat_lmer_pre <- "
+  life_sat ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+    age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+    res_vienna + acc_bal + acc_gar + home_sqm + 
+    work_h_b + work_h_w +
+    work_homeoff_b +  work_homeoff_w +
+    hh_income_b + hh_income_w +
+    hh_adults + hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + 
+    hh_oldfam + hh_outfam + hh_partner +
+    home_owner +
+    med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
+    med_vid_orf_b + med_vid_pri_b + 
+    med_txt_kro_w + med_txt_sta_w + med_txt_pre_w + med_txt_oes_w + med_txt_kur_w + med_txt_slz_w + med_txt_son_w + 
+    med_vid_orf_w + med_vid_pri_w + 
+    risk_prop_b + risk_prop_w + 
+    act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+    act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+    sat_dem_w + sat_dem_b + 
+    health_w + health_b +
+    loc_cntrl_int_m_w + loc_cntrl_int_m_b
+    "
+fit_life_sat_lmer_pre <- lmerTest::lmer(model_life_sat_lmer_pre, data = d_long_50_imp)
+print_res(broom.mixed::tidy(fit_life_sat_lmer_pre, conf.int = T), imputation = FALSE)
 ```
 
-Save results so that we can extract them in the manuscript.
+## Positive Affect
 
 ```{r}
+model_aff_pos_lmer_pre <- "
+  aff_pos_fs ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+    age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+    res_vienna + acc_bal + acc_gar + home_sqm + 
+    work_h_b + work_h_w +
+    work_homeoff_b +  work_homeoff_w +
+    hh_income_b + hh_income_w +
+    hh_adults + hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + 
+    hh_oldfam + hh_outfam + hh_partner +
+    home_owner +
+    med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
+    med_vid_orf_b + med_vid_pri_b + 
+    med_txt_kro_w + med_txt_sta_w + med_txt_pre_w + med_txt_oes_w + med_txt_kur_w + med_txt_slz_w + med_txt_son_w + 
+    med_vid_orf_w + med_vid_pri_w + 
+    risk_prop_b + risk_prop_w + 
+    act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+    act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+    sat_dem_w + sat_dem_b + 
+    health_w + health_b +
+    loc_cntrl_int_m_w + loc_cntrl_int_m_b
+    "
+fit_aff_pos_lmer_pre <- lmerTest::lmer(model_aff_pos_lmer_pre, data = d_long_50_imp)
+print_res(broom.mixed::tidy(fit_aff_pos_lmer_pre, conf.int = T), imputation = FALSE)
+```
+
+## Negative Affect
+
+```{r}
+model_aff_neg_lmer_pre <- "
+  aff_neg_fs ~ 
+    (1 | id) + (1 | wave) + 
+    soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+    soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+    soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+    soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+    age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+    res_vienna + acc_bal + acc_gar + home_sqm + 
+    work_h_b + work_h_w +
+    work_homeoff_b +  work_homeoff_w +
+    hh_income_b + hh_income_w +
+    hh_adults + hh_child18 + hh_child17 + hh_child14 + hh_child5 + hh_child2 + 
+    hh_oldfam + hh_outfam + hh_partner +
+    home_owner +
+    med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + 
+    med_vid_orf_b + med_vid_pri_b + 
+    med_txt_kro_w + med_txt_sta_w + med_txt_pre_w + med_txt_oes_w + med_txt_kur_w + med_txt_slz_w + med_txt_son_w + 
+    med_vid_orf_w + med_vid_pri_w + 
+    risk_prop_b + risk_prop_w + 
+    act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+    act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+    sat_dem_w + sat_dem_b + 
+    health_w + health_b +
+    loc_cntrl_int_m_w + loc_cntrl_int_m_b
+    "
+fit_aff_neg_lmer_pre <- lmerTest::lmer(model_aff_neg_lmer_pre, data = d_long_50_imp)
+print_res(broom.mixed::tidy(fit_aff_neg_lmer_pre, conf.int = T), imputation = FALSE)
+```
+
+# Preregistered without imputation
+
+Same as before, but now don't use any imputed data whatsoever. Was preregistered as additional analysis to provide comparison.
+
+## Life satisfaction
+
+```{r}
+model_life_sat_lmer_noi <- "
+  life_sat ~
+  (1 | id) + (1 | wave) + 
+  soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+  soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+  soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+  soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+  age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+  res_vienna + acc_bal + acc_gar + home_sqm + corona_pos +
+  med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + med_vid_orf_b + med_vid_pri_b + 
+  risk_prop_b + loc_cntrl_int_m_b + 
+  act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+  act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+  sat_dem_w + sat_dem_b + 
+  health_w + health_b
+"
+fit_life_sat_lmer_noi <- lmerTest::lmer(model_life_sat_lmer_noi, data = d_long_50)
+print_res(broom.mixed::tidy(fit_life_sat_lmer_noi, conf.int = T), imputation = FALSE)
+```
+
+## Positive Affect
+
+```{r}
+model_aff_pos_lmer_noi <- "
+  aff_pos_fs ~ 
+  (1 | id) + (1 | wave) + 
+  soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+  soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+  soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+  soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+  age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+  res_vienna + acc_bal + acc_gar + home_sqm + corona_pos +
+  med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + med_vid_orf_b + med_vid_pri_b + 
+  risk_prop_b + loc_cntrl_int_m_b + 
+  act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+  act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+  sat_dem_w + sat_dem_b + 
+  health_w + health_b
+"
+fit_aff_pos_lmer_noi <- lmerTest::lmer(model_aff_pos_lmer_noi, data = d_long_50)
+print_res(broom.mixed::tidy(fit_aff_pos_lmer_noi, conf.int = T), imputation = FALSE)
+```
+
+## Negative Affect
+
+```{r}
+model_aff_neg_lmer_noi <- "
+  aff_neg_fs ~ 
+  (1 | id) + (1 | wave) + 
+  soc_med_read_w + soc_med_like_share_w + soc_med_post_w  + 
+  soc_med_fb_w + soc_med_ig_w + soc_med_wa_w + soc_med_yt_w + soc_med_tw_w +
+  soc_med_read_b + soc_med_like_share_b + soc_med_post_b + 
+  soc_med_fb_b + soc_med_ig_b + soc_med_wa_b + soc_med_yt_b + soc_med_tw_b +  
+  age + male + born_aus + born_aus_prnts + edu_fac + employment_fac +
+  res_vienna + acc_bal + acc_gar + home_sqm + corona_pos +
+  med_txt_kro_b + med_txt_sta_b + med_txt_pre_b + med_txt_oes_b + med_txt_kur_b + med_txt_slz_b + med_txt_son_b + med_vid_orf_b + med_vid_pri_b + 
+  risk_prop_b + loc_cntrl_int_m_b + 
+  act_wrk_w + act_spo_w + act_frn_w + act_sho_w + act_pet_w + 
+  act_wrk_b + act_spo_b + act_frn_b + act_sho_b + act_pet_b +
+  sat_dem_w + sat_dem_b + 
+  health_w + health_b
+"
+fit_aff_neg_lmer_noi <- lmerTest::lmer(model_aff_neg_lmer_noi, data = d_long_50)
+print_res(broom.mixed::tidy(fit_aff_neg_lmer_noi, conf.int = T), imputation = FALSE)
+```
+
+# Figures
+
+ - In what follows, see figure with all results combined. 
+ - Results show that different models are comparable. 
+ - The model without control variables stands out a bit, showing that controlling for additional varying variables is important.
+ - The preregistered model without imputation also has larger confidence intervals, which was to be expected given fewer data.
+
+```{r warning=F, fig.height=6}
+# get data
+dat_fig_results_activity_pub <- get_dat_res(
+  fit_aff_neg_lmer_pub, fit_aff_pos_lmer_pub, fit_life_sat_lmer_pub, 
+  type = "Activity", analysis = "1. Published", variance = "within")
+
+dat_fig_results_channel_pub <- get_dat_res(
+  fit_aff_neg_lmer_pub, fit_aff_pos_lmer_pub, fit_life_sat_lmer_pub, 
+  type = "Channels", analysis = "1. Published", variance = "within")
+
+dat_fig_results_activity_add <- get_dat_res(
+  fit_aff_neg_lmer_add, fit_aff_pos_lmer_add, fit_life_sat_lmer_add, 
+  type = "Activity", analysis = "2. Additional covars", variance = "within")
+
+dat_fig_results_channel_add <- get_dat_res(
+  fit_aff_neg_lmer_add, fit_aff_pos_lmer_add, fit_life_sat_lmer_add, 
+  type = "Channels", analysis = "2. Additional covars", variance = "within")
+
+dat_fig_results_activity_nco <- get_dat_res(
+  fit_aff_neg_lmer_nco, fit_aff_pos_lmer_nco, fit_life_sat_lmer_nco, 
+  type = "Activity", analysis = "3. No covars", variance = "within")
+
+dat_fig_results_channel_nco <- get_dat_res(
+  fit_aff_neg_lmer_nco, fit_aff_pos_lmer_nco, fit_life_sat_lmer_nco, 
+  type = "Channels", analysis = "3. No covars", variance = "within")
+
+dat_fig_results_activity_pre <- get_dat_res(
+  fit_aff_neg_lmer_pre, fit_aff_pos_lmer_pre, fit_life_sat_lmer_pre, 
+  type = "Activity", analysis = "4. Preregistered", variance = "within")
+
+dat_fig_results_channel_pre <- get_dat_res(
+  fit_aff_neg_lmer_pre, fit_aff_pos_lmer_pre, fit_life_sat_lmer_pre, 
+  type = "Channels", analysis = "4. Preregistered", variance = "within")
+
+dat_fig_results_activity_noi <- get_dat_res(
+  fit_aff_neg_lmer_noi, fit_aff_pos_lmer_noi, fit_life_sat_lmer_noi, 
+  type = "Activity", analysis = "5. No imputation", variance = "within")
+
+dat_fig_results_channel_noi <- get_dat_res(
+  fit_aff_neg_lmer_noi, fit_aff_pos_lmer_noi, fit_life_sat_lmer_noi, 
+  type = "Channels", analysis = "5. No imputation", variance = "within")
+
+dat_fig_results_comp <- rbind(
+  dat_fig_results_activity_pub, 
+  dat_fig_results_channel_pub,
+  dat_fig_results_activity_nco, 
+  dat_fig_results_channel_nco,
+  dat_fig_results_activity_add, 
+  dat_fig_results_channel_add,
+  dat_fig_results_activity_pre, 
+  dat_fig_results_channel_pre,
+  dat_fig_results_activity_noi, 
+  dat_fig_results_channel_noi
+)
+
+# make figure
+fig_results_comp <- make_graph_res(
+  dat_fig_results_comp,
+  sesoi = "est",
+  facet = "type"
+  )
+fig_results_comp
+
+# safe figure
+ggsave("figures/fig_results_comparison.pdf", 
+       width = 7, height = 5,
+       plot = fig_results_within_comp)
+```
+
+```{r eval=T}
 save.image("data/workspace_2.RData")
 ```

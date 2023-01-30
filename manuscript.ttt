@@ -1,0 +1,89 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:tab-descriptives}Descriptives of the main variables.}
+
+\begin{tabular}{lllll}
+\toprule
+ & \multicolumn{1}{c}{sd} & \multicolumn{1}{c}{min} & \multicolumn{1}{c}{max} & \multicolumn{1}{c}{mean}\\
+\midrule
+Well-being &  &  &  & \\
+\ \ \ Life satisfaction & 2.22 & 6.37 & 6.59 & 6.51\\
+\ \ \ Positive affect & 0.94 & 3.11 & 3.22 & 3.16\\
+\ \ \ Negative affect & 0.76 & 1.74 & 1.87 & 1.79\\
+Social media use &  &  &  & \\
+\ \ \ Read & 1.39 & 2.02 & 2.87 & 2.37\\
+\ \ \ Like \& share & 1.19 & 1.56 & 1.95 & 1.74\\
+\ \ \ Posting & 0.89 & 1.37 & 1.42 & 1.40\\
+Social media channel &  &  &  & \\
+\ \ \ Facebook & 1.60 & 2.21 & 2.74 & 2.43\\
+\ \ \ Twitter & 0.95 & 1.32 & 1.45 & 1.38\\
+\ \ \ Instagram & 1.33 & 2.04 & 2.05 & 2.05\\
+\ \ \ WhatsApp & 1.67 & 2.32 & 2.65 & 2.46\\
+\ \ \ YouTube & 1.28 & 1.90 & 2.02 & 1.96\\
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{center}
+
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:tab-within}Overview of all within-person effects.}
+
+\footnotesize{
+
+\begin{tabular}{lrrrrr}
+\toprule
+ &  & \multicolumn{2}{c}{Confidence interval}  &  &\\
+\cmidrule(r){3-4}
+Predictor & \multicolumn{1}{c}{b} & \multicolumn{1}{c}{Lower level} & \multicolumn{1}{c}{Higher level} & \multicolumn{1}{c}{beta} & \multicolumn{1}{c}{p}\\
+\midrule
+Life satisfaction &  &  &  &  & \\
+\ \ \ Reading & 0.03 & -0.01 & 0.07 & 0.02 & .091\\
+\ \ \ Liking \& Sharing & -0.02 & -0.08 & 0.03 & -0.01 & .299\\
+\ \ \ Posting & -0.05 & -0.11 & 0.01 & -0.02 & .114\\
+\ \ \ Facebook & 0.00 & -0.04 & 0.04 & 0.00 & .964\\
+\ \ \ Instagram & 0.01 & -0.01 & 0.03 & 0.01 & .226\\
+\ \ \ WhatsApp & 0.00 & -0.03 & 0.02 & 0.00 & .664\\
+\ \ \ YouTube & 0.02 & -0.03 & 0.06 & 0.01 & .402\\
+\ \ \ Twitter & -0.02 & -0.09 & 0.05 & -0.01 & .420\\
+Positive affect &  &  &  &  & \\
+\ \ \ Reading & -0.03 & -0.05 & -0.01 & -0.04 & .011\\
+\ \ \ Liking \& Sharing & 0.01 & -0.02 & 0.04 & 0.01 & .535\\
+\ \ \ Posting & 0.01 & -0.02 & 0.05 & 0.01 & .404\\
+\ \ \ Facebook & -0.01 & -0.04 & 0.02 & -0.01 & .581\\
+\ \ \ Instagram & 0.00 & -0.02 & 0.02 & 0.00 & .704\\
+\ \ \ WhatsApp & 0.01 & -0.02 & 0.04 & 0.01 & .444\\
+\ \ \ YouTube & 0.00 & -0.04 & 0.04 & 0.00 & .904\\
+\ \ \ Twitter & 0.01 & 0.00 & 0.02 & 0.01 & .129\\
+Negative affect &  &  &  &  & \\
+\ \ \ Reading & 0.00 & -0.01 & 0.01 & 0.00 & .971\\
+\ \ \ Liking \& Sharing & 0.02 & 0.00 & 0.03 & 0.02 & .019\\
+\ \ \ Posting & 0.05 & 0.02 & 0.08 & 0.04 & .009\\
+\ \ \ Facebook & -0.01 & -0.02 & 0.01 & -0.01 & .226\\
+\ \ \ Instagram & 0.00 & -0.01 & 0.01 & 0.00 & .371\\
+\ \ \ WhatsApp & 0.00 & -0.01 & 0.02 & 0.01 & .562\\
+\ \ \ YouTube & 0.01 & -0.01 & 0.04 & 0.02 & .250\\
+\ \ \ Twitter & 0.01 & 0.00 & 0.03 & 0.01 & .034\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{threeparttable}
+\end{center}
+
+\end{table*}

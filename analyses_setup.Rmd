@@ -1,0 +1,812 @@
+---
+title: "Analyses Setup"
+output:
+  html_document:
+    toc: TRUE
+    toc_float:
+      collapsed: FALSE
+    toc_depth: 2
+    code_folding: hide
+    df_print: paged
+bibliography      : 
+  - "bibliography/r-references.bib"
+  - "bibliography/references.bib"
+---
+  
+```{r knitr-setup, include=F}
+set.seed(170819)
+knitr::opts_chunk$set(warning=F, echo=T, error=F, message=F, cache=T, rows.print=20)
+options(digits=2, width=260, scipen=999)
+```
+
+- Here you can find the set-up for the analyses and the results.
+- Includes custom functions, data-wrangling, and data imputation. 
+- To see the code, click on button "Code".
+- Alternatively, you can download the rmd file from the github repo.
+- The data are hosted on aussda. Please download them separately, to rerun the analyses (https://doi.org/10.11587/28KQNS). 
+- Note that this paper uses a scientific use file, which is at the time of writing not officially published.
+
+# Set-up
+
+Load packages.
+
+```{r r-setup, results='hide', cache=F}
+# install packages
+# devtools::install_github("https://github.com/tdienlin/td@v.0.0.2.5")
+
+# define packages
+packages <- c("broom.mixed", "brms", "devtools", "GGally", "ggplot2", 
+              "gridExtra", "kableExtra", "knitr", "lavaan", "lme4", 
+              "magrittr", "mice", #"mvnormalTest", 
+              "PerFit", "performance", "psych", "quanteda.textstats", "semTools", "tidyverse")
+
+# load packages
+lapply(c(packages, "td"), library, character.only = TRUE)
+```
+
+## Session info
+
+Provide session info to make results reproducible.
+
+```{r}
+sessionInfo()
+```
+
+# Custom functions
+
+## find_var
+
+Find variables in dataset.
+
+```{r}
+find_var <- function(name, data = doc)(
+  # finds the variables names for an item for each wave
+  data %>%
+    filter(Label == name) %>%
+    select(Variable) %>%
+    unlist() %>%
+    set_names(sub("\\_.*", "", .))
+)
+```
+
+## get_specs
+
+Extract characteristics from fitted lmer models.
+
+```{r}
+get_specs <- function(model){
+  # Get mean, max, and min values
+  
+  dat <- coefficients(model)$wave
+  specs <- data.frame(
+    sd = attr(VarCorr(model), "sc"),
+    min = min(dat),
+    max = max(dat),
+    mean = mean(dat$`(Intercept)`)
+  )
+}
+```
+
+## get_dat
+
+Get data from fitted lmer objects for descriptives.
+
+```{r}
+get_dat <- function(model){
+  coefficients(model)$wave %>% 
+    tibble::rownames_to_column("wave") %>% 
+    rename(value = "(Intercept)") %>% 
+    mutate(wave = as.integer(.$wave),
+           value = as.numeric(.$value)) 
+} 
+```
+
+## get_rel
+
+Determine average reliability for measures across waves
+
+```{r}
+get_rel <- function(data, waves=24){
+  
+  # extract average reliability from lavaan fitted cfa with several groups
+  reliability(data) %>% 
+    unlist() %>% 
+    matrix(5, waves) %>% 
+    as.data.frame() %>% 
+    set_rownames(c("alpha", "omega", "omega2", "omega3", "avevar")) %>% 
+    summarise(omega = rowMeans(.["omega",])) %>% 
+    return()
+}
+```
+
+## make_graph
+
+Make graph of variables' development.
+
+```{r}
+make_graph <- function(model, title, ll, ul, line = TRUE, points = TRUE, labels = FALSE, lmer=FALSE, legend=FALSE){
+
+    if(isTRUE(lmer)){
+      dat <- get_dat(model)
+    } else{
+    dat <- model
+  }
+    
+  graph <- 
+    ggplot(dat, aes(wave, value, color = dimension)) +
+    {if(legend) theme(
+      legend.position = c(0.85, 0.8),
+      legend.title = element_blank()
+      )} + 
+    {if(!legend) theme(
+      legend.position = "none"
+    )} +
+    theme(axis.title.x=element_blank()) +
+    coord_cartesian(ylim = c(ll, ul)) +
+    ggtitle(title) +
+    {if(line) geom_smooth(se = FALSE, method = 'loess')} +
+    {if(points) geom_point()} +
+    scale_color_manual(values=c("dodgerblue3", "deepskyblue2", "magenta2", "green2", "red"))
+  graph
+}
+```
+
+## print_res
+
+```{r}
+# print results for online material
+print_res <- function(object, imputation = TRUE){
+  
+  if(isTRUE(imputation)){
+    object %>% 
+      as.data.frame %>% 
+      select(term, estimate, `2.5 %`, `97.5 %`, p.value) %>% 
+      mutate(p.value = td::my_round(p.value, "p"))
+    }
+  else{
+    object %>% 
+      as.data.frame %>% 
+      select(term, estimate, `2.5 %` = conf.low, `97.5 %` = conf.high, p.value) %>% 
+      mutate(p.value = td::my_round(p.value, "p"))
+  }
+}
+```
+
+## get_dat_res
+
+Get data of lmer objects for specific results.
+
+```{r}
+# get data
+get_dat_res <- function(data_aff_neg, data_aff_pos, data_life_sat, variance = "within", type = "channels", analysis = "Standardized"){
+  
+  if(isTRUE(class(data_aff_neg) == "lmerModLmerTest")) {
+         dat_fig_results <- 
+           broom.mixed::tidy(data_aff_neg, conf.int = T) %>% 
+           mutate(dv = "aff_neg") %>% 
+           rbind(
+             broom.mixed::tidy(data_aff_pos, conf.int = T) %>% 
+               mutate(dv = "aff_pos")) %>% 
+           rbind(
+             broom.mixed::tidy(data_life_sat, conf.int = T) %>% 
+               mutate(dv = "life_sat"))
+         } else{ 
+           dat_fig_results <- 
+             data_aff_neg %>% 
+             mutate(dv = "aff_neg") %>% 
+             rbind(data_aff_pos %>% 
+                   mutate(dv = "aff_pos")) %>% 
+             rbind(data_life_sat %>% 
+                     mutate(dv = "life_sat")) %>% 
+           rename(conf.low = `2.5 %`, conf.high = `97.5 %`)
+           }
+  dat_fig_results %<>% 
+  mutate(
+    Variance = ifelse(grepl(".*_w\\>", .$term), "within", "between"),
+    iv = gsub("_(w|b)\\>", "", .$term)
+         ) %>%
+  mutate(
+    Variance = factor(.$Variance, 
+                  levels = c("within", "between")),
+    dv = factor(.$dv, 
+                levels = c("life_sat", "aff_pos", "aff_neg"),
+                labels = c("Life satisfaction", "Positive affect", "Negative affect")),
+    Type = type,
+    Analysis = analysis
+  ) %>% 
+  select(dv, iv, Variance, Type, Analysis, estimate, conf.low, conf.high, p.value) %>% 
+    filter(Variance == variance)
+
+  # select Social Media type of activity
+  if(type == "Activity") {
+    dat_fig_results %<>%
+    filter(iv %in% c("soc_med_read", "soc_med_like_share", "soc_med_post")) %>% 
+    mutate(
+      iv = factor(.$iv, 
+                  levels = c("soc_med_post", "soc_med_like_share", "soc_med_read"), 
+                  labels = c("Posting", "Liking & Sharing", "Reading"))
+    )
+  } else if(type == "Channels"){
+    dat_fig_results %<>%
+    filter(iv %in% c("soc_med_fb", "soc_med_ig", "soc_med_wa", "soc_med_yt", "soc_med_tw")) %>% 
+    mutate(iv = factor(.$iv, levels = c("soc_med_yt", "soc_med_wa", "soc_med_ig", "soc_med_tw", "soc_med_fb"), labels = c("YouTube", "WhatsApp", "Instagram", "Twitter", "Facebook")))
+  } else if(type == "Controls"){
+    dat_fig_results %<>%
+      filter(iv %in% c("male", "health", "loc_cntrl_int_m",
+                       "act_spo", "sat_dem", "corona_pos")) %>% 
+      mutate(iv = factor(.$iv, levels = c("male", "health", "loc_cntrl_int_m",
+                                          "act_spo", "sat_dem", "corona_pos"), 
+                         labels = c("Male", "Health", "Internal locus of control",
+                                    "Sport", "Satisfaction democracy", "Corona positive")))
+  } else if(type == "Living\nconditions"){
+    dat_fig_results %<>%
+      filter(iv %in% c("health", "corona_pos", "work_h", "work_homeoff", "hh_income")) %>% 
+      mutate(iv = factor(.$iv, levels = c("health", "corona_pos", "work_h", "work_homeoff", "hh_income"),
+                         labels = c("Health", "Corona positive", "Work hours", "Homeoffice", "Household income")))
+  } else if(type == "News\nuse"){
+    dat_fig_results %<>%
+      filter(iv %in% c("med_txt_kro", "med_txt_sta", "med_txt_pre", "med_txt_oes", "med_txt_kur", "med_txt_slz", "med_txt_son", "med_vid_orf", "med_vid_pri")) %>% 
+      mutate(iv = factor(.$iv, levels = c("med_txt_kro", "med_txt_sta", "med_txt_pre", "med_txt_oes", "med_txt_kur", "med_txt_slz", "med_txt_son", "med_vid_orf", "med_vid_pri"),
+                         labels = c("Krone", "Der Standard", "Die Presse", "Österreich", "Kurier", "Salzb. Nachrichten", "Other", "ORF", "Private news")))
+  } else if(type == "Outdoor\nactivities"){
+    dat_fig_results %<>%
+      filter(iv %in% c("act_wrk", "act_spo", "act_frn", "act_sho", "act_pet")) %>% 
+      mutate(iv = factor(.$iv, levels = c("act_wrk", "act_spo", "act_frn", "act_sho", "act_pet"),
+                         labels = c("Working", "Sports", "Friends", "Shopping", "With pets")))
+  } else if(type == "Psycho-\nlogy"){
+    dat_fig_results %<>%
+      filter(iv %in% c("risk_prop", "loc_cntrl_int_m", "sat_dem")) %>% 
+      mutate(iv = factor(.$iv, levels = c("risk_prop", "loc_cntrl_int_m", "sat_dem"),
+                         labels = c("Risk taking", "Internal locus of control", "Satisfaction democracy")))
+  }
+  return(dat_fig_results)
+}
+```
+
+## make_graph_res
+
+Make graph of effects
+
+```{r}
+make_graph_res <- function(data, sesoi = NULL, legend = TRUE, facet = "type", title = NULL){
+  ggplot(data, aes(x = estimate, y = iv)) + 
+  scale_color_manual(values = c("black", "grey75", "darkcyan", "deepskyblue", "cornflowerblue", "darkcyan", "aquamarine")) +
+  geom_vline(xintercept = 0, lwd = .75, colour = "darkgrey") + 
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high, color = Analysis),
+                lwd = .75, height = .2, position = position_dodge(-.7)) +
+  geom_point(aes(color = Analysis), size = 1.5, position = position_dodge(-.7)) +
+    {if(isTRUE(sesoi == "est")) geom_vline(data=filter(data, dv=="Life satisfaction"), aes(xintercept=-.3), colour="darkgrey", linetype = "dashed")} + 
+    {if(isTRUE(sesoi == "est")) geom_vline(data=filter(data, dv=="Life satisfaction"), aes(xintercept=.3), colour="darkgrey", linetype = "dashed")} + 
+    {if(isTRUE(sesoi == "est")) geom_vline(data=filter(data, dv!="Life satisfaction"), aes(xintercept=-.15), colour="darkgrey", linetype = "dashed")} +
+    {if(isTRUE(sesoi == "est")) geom_vline(data=filter(data, dv!="Life satisfaction"), aes(xintercept=.15), colour="darkgrey", linetype = "dashed")} +
+    {if(isTRUE(sesoi == "std")) geom_vline(aes(xintercept=.1), colour="darkgrey", linetype = "dashed")} + 
+    {if(isTRUE(sesoi == "std")) geom_vline(aes(xintercept=-.1), colour="darkgrey", linetype = "dashed")} +   
+  theme(
+    axis.title.y = element_blank(),
+    plot.title = element_text(hjust = .5),
+    panel.spacing = unit(.9, "lines"),
+    text = element_text(size = 12),
+    axis.text.y = element_text(hjust = 1)
+    ) +
+  {if(!is.null(title)) ggtitle(title)} +
+  {if(!isTRUE(legend)) theme(legend.position = "none")} + 
+  # guides(colour = guide_legend(reverse=T)) +
+    {if(facet == "type")
+      facet_grid(rows = vars(Type),
+             cols = vars(dv),
+             scales = "free",
+             space = "free_y")
+    } + 
+    {if(facet == "analysis")
+      facet_grid(rows = vars(Variance),
+             cols = vars(dv),
+             scales = "free",
+             space = "free_y")
+    }
+}
+```
+
+## get_fs
+
+Extract factor scores.
+
+```{r}
+get_fs <- function(model) {
+  # the aim is to get factor scores on original scaling
+  # hence export factor values for all items
+  # then compute average
+  dat_ov <- lavaan::lavPredict(model, type = "ov", assemble = TRUE) %>% 
+    mutate(fs = rowMeans(.[1:3]))
+  return(dat_ov$fs)
+}
+```
+
+# Data Wrangling
+## Load data
+
+```{r}
+doc <- read_csv2("data/Variable_List_w1-34.csv")
+d_raw <- read_csv("data/W1-32_ACPP_V20220601.csv")
+```
+
+## Find names
+
+Identify the names of each item for each wave.
+
+```{r}
+# identify variable names of items, using custom function
+health <- find_var("Gesundheitszustand") # wsn't collected at wave 21
+aff_neg_1 <- find_var("Depressivitaet: einsam")
+aff_neg_2 <- find_var("Depressivitaet: aergerlich")
+aff_neg_3 <- find_var("Depressivitaet: so niedergeschlagen")
+aff_neg_4 <- find_var("Depressivitaet: sehr nervoes")
+aff_neg_5 <- find_var("Depressivitaet: aengstlich")
+aff_neg_6 <- find_var("Depressivitaet: bedrueckt und traurig")
+aff_pos_1 <- find_var("Depressivitaet: ruhig und gelassen")
+aff_pos_2 <- find_var("Depressivitaet: gluecklich")
+aff_pos_3 <- find_var("Depressivitaet: voller Energie")
+act_wrk <- find_var("Zuhause verlassen: Arbeit")
+act_spo <- find_var("Zuhause verlassen: Sport")
+act_frn <- find_var("Zuhause verlassen: Freunde oder Verwandte treffen")
+act_sho <- find_var("Zuhause verlassen: Essen einkaufen")
+act_pet <- find_var("Zuhause verlassen: Haustier ausfuehren")
+sat_dem <- find_var("Demokratiezufriedenheit: Oesterreich")
+work_h <- find_var("Arbeitsstunden: Jetzt pro Woche")
+work_homeoff <- find_var("Aenderung berufliche Situation: Home-Office")
+hh_income <- find_var("Aktuelles Haushaltseinkommen")
+med_txt_kro <- find_var("Mediennutzung: Kronen Zeitung oder www.krone.at")
+med_txt_sta <- find_var("Mediennutzung: Der Standard oder derstandard.at")
+med_txt_pre <- find_var("Mediennutzung: Die Presse oder diepresse.com")
+med_txt_oes <- find_var("Mediennutzung: Oesterreich oder oe24.at")
+med_txt_kur <- find_var("Mediennutzung: Kurier oder kurier.at")
+med_txt_slz <- find_var("Mediennutzung: Salzburger Nachrichten oder salzburg.at")
+med_txt_son <- find_var("Mediennutzung: Sonstige oesterreichische Tageszeitungen")
+med_vid_orf <- find_var("Mediennutzung: ORF (Nachrichten)")
+med_vid_pri <- find_var("Mediennutzung: Privatfernsehen (Nachrichten)")
+soc_med_fb <- find_var("Soziale Medien: Facebook")
+soc_med_tw <- find_var("Soziale Medien: Twitter")
+soc_med_ig <- find_var("Soziale Medien: Instagram")
+soc_med_yt <- find_var("Soziale Medien: Youtube")
+soc_med_wa <- find_var("Soziale Medien: WhatsApp")
+soc_med_read <- find_var("Soziale Medien Aktivitaet: Postings zu Corona anderer lesen")
+soc_med_like_share <- find_var("Soziale Medien Aktivitaet: Postings liken, teilen oder retweeten")
+soc_med_post <- find_var("Soziale Medien Aktivitaet: selber Postings zu Corona verfassen")
+life_sat <- find_var("Lebenszufriedenheit")
+risk_prop <- find_var("Risikobereitschaft")
+loc_cntrl_int_1 <- find_var("Psychologie: habe Leben selbst in der Hand")
+loc_cntrl_int_2 <- find_var("Psychologie: Belohnung durch Anstrengung")
+loc_cntrl_int_3 <- find_var("Psychologie: Fremdbestimmung")
+loc_cntrl_int_4 <- find_var("Psychologie: Schicksal")
+trst_media <- find_var("Vertrauen: ORF")
+trst_police <- find_var("Vertrauen: Polizei")
+trst_media <- find_var("Vertrauen: Parlament")
+trst_hlthsec <- find_var("Vertrauen: Gesundheitswesen")
+trst_gov <- find_var("Vertrauen: Bundesregierung")
+trst_army <- find_var("Vertrauen: Bundesheer")
+corona_pos <- c(
+  find_var("Corona-Diagnose: Respondent"),
+  find_var("Corona-Diagnose: Monat")
+)
+```
+
+## Select variables
+
+```{r}
+d_wide <- d_raw %>% 
+  select(
+    id = RESPID,
+    gender = SD_GENDER,
+    acc_bal = SD_ACCESS_BALCONY,
+    acc_gar = SD_ACCESS_GARDEN,
+    year_birth = SD_BIRTHYEAR,
+    born_aus = SD_BORN_AUSTRIA,
+    born_aus_prnts = SD_MIGR_BACKGR,
+    county = SD_BULA,
+    edu = SD_EDU,
+    employment = SD_EMPLSTATUS_FEB2020,
+    hh_adults = SD_HH_ADULTS,
+    hh_child18 = SD_HH_CHILD18,
+    hh_child17 = SD_HH_TEENS,
+    hh_child14 = SD_HH_CHILD14,
+    hh_child5 = SD_HH_CHILD5,
+    hh_child2 = SD_HH_CHILD2,
+    hh_oldfam = SD_HH_OLDERFAM,
+    hh_outfam = SD_HH_OUTERFAM,
+    hh_partner = SD_HH_PARTNER,
+    # hh_income = SD_HHINCOME_FEB2020,
+    home_sqm = SD_HOME_SQM,
+    home_owner = SD_HOMEOWNER,
+    # work_h = SD_WORKHOURS_FEB2020,
+    health = all_of(health),
+    life_sat = all_of(life_sat),
+    aff_neg_1 = all_of(aff_neg_1),
+    aff_neg_2 = all_of(aff_neg_2),
+    aff_neg_3 = all_of(aff_neg_3),
+    aff_neg_4 = all_of(aff_neg_4),
+    aff_neg_5 = all_of(aff_neg_5),
+    aff_neg_6 = all_of(aff_neg_6),
+    aff_pos_1 = all_of(aff_pos_1),
+    aff_pos_2 = all_of(aff_pos_2),
+    aff_pos_3 = all_of(aff_pos_3),
+    act_wrk = all_of(act_wrk),
+    act_spo = all_of(act_spo),
+    act_frn = all_of(act_frn),
+    act_sho = all_of(act_sho),
+    act_pet = all_of(act_pet),
+    sat_dem = all_of(sat_dem),
+    sat_dem = all_of(sat_dem),
+    work_h = all_of(work_h),
+    work_homeoff = all_of(work_homeoff),
+    hh_income = all_of(hh_income),
+    med_txt_kro = all_of(med_txt_kro),
+    med_txt_sta = all_of(med_txt_sta),
+    med_txt_pre = all_of(med_txt_pre),
+    med_txt_oes = all_of(med_txt_oes),
+    med_txt_kur = all_of(med_txt_kur),
+    med_txt_slz = all_of(med_txt_slz),
+    med_txt_son = all_of(med_txt_son),
+    med_vid_orf = all_of(med_vid_orf),
+    med_vid_pri = all_of(med_vid_pri),
+    soc_med_fb = all_of(soc_med_fb),
+    soc_med_tw = all_of(soc_med_tw),
+    soc_med_ig = all_of(soc_med_ig),
+    soc_med_yt = all_of(soc_med_yt),
+    soc_med_wa = all_of(soc_med_wa),
+    soc_med_like_share = all_of(soc_med_like_share),
+    soc_med_read = all_of(soc_med_read),
+    soc_med_post = all_of(soc_med_post),
+    risk_prop = all_of(risk_prop),
+    loc_cntrl_int_1 = all_of(loc_cntrl_int_1),
+    loc_cntrl_int_2 = all_of(loc_cntrl_int_2),
+    loc_cntrl_int_3 = all_of(loc_cntrl_int_3),
+    loc_cntrl_int_4 = all_of(loc_cntrl_int_4),
+    trst_media = all_of(trst_media),
+    trst_police = all_of(trst_police),
+    trst_media = all_of(trst_media),
+    trst_hlthsec = all_of(trst_hlthsec),
+    trst_gov = all_of(trst_gov),
+    trst_army = all_of(trst_army),
+    corona_pos = all_of(corona_pos)
+  )
+```
+
+Make new documentation with selected variables.
+
+```{r}
+doc_selected <- filter(doc, Variable %in% c(
+  "RESPID",
+  "SD_GENDER",
+  "SD_ACCESS_BALCONY",
+  "SD_ACCESS_GARDEN",
+  "SD_BIRTHYEAR",
+  "SD_BORN_AUSTRIA",
+  "SD_MIGR_BACKGR",
+  "SD_BULA",
+  "SD_EDU",
+  "SD_EMPLSTATUS_FEB2020",
+  "SD_HH_ADULTS",
+  "SD_HH_CHILD18",
+  "SD_HH_TEENS",
+  "SD_HH_CHILD14",
+  "SD_HH_CHILD5",
+  "SD_HH_CHILD2",
+  "SD_HH_OLDERFAM",
+  "SD_HH_OUTERFAM",
+  "SD_HH_PARTNER",
+  "SD_HHINCOME_FEB2020",
+  "SD_HOME_SQM",
+  "SD_HOMEOWNER",
+  "SD_WORKHOURS_FEB2020",
+  health,
+  life_sat,
+  aff_neg_1,
+  aff_neg_2,
+  aff_neg_3,
+  aff_neg_4,
+  aff_neg_5,
+  aff_neg_6,
+  aff_pos_1,
+  aff_pos_2,
+  aff_pos_3,
+  act_wrk,
+  act_spo,
+  act_frn,
+  act_sho,
+  act_pet,
+  sat_dem,
+  work_h,
+  work_homeoff,
+  hh_income,
+  med_txt_kro,
+  med_txt_sta,
+  med_txt_pre,
+  med_txt_oes,
+  med_txt_kur,
+  med_txt_slz,
+  med_txt_son,
+  med_vid_orf,
+  med_vid_pri,
+  soc_med_fb,
+  soc_med_tw,
+  soc_med_ig,
+  soc_med_yt,
+  soc_med_wa,
+  soc_med_like_share,
+  soc_med_post,
+  soc_med_read,
+  risk_prop,
+  loc_cntrl_int_1,
+  loc_cntrl_int_2,
+  loc_cntrl_int_3,
+  loc_cntrl_int_4,
+  trst_media,
+  trst_police,
+  trst_media,
+  trst_hlthsec,
+  trst_gov,
+  trst_army,
+  corona_pos
+))
+write.csv(doc_selected, "data/documentation.csv")
+```
+
+## Recode variables
+
+```{r}
+d_wide %<>%
+  mutate_at(vars(everything(.)), funs(na_if(., 88))) %>%
+  mutate_at(vars(everything(.)), funs(na_if(., 99))) %>%
+  mutate(
+    male = 2 - .$gender,
+    age = 2021 - .$year_birth,
+    res_vienna = recode(.$county, `8` = 1L, .default = 0L,),
+    born_aus = 2 - .$born_aus,
+    home_owner = 2 - .$home_owner,
+    employment_fac = factor(.$employment, 
+                            labels = c("Unemployed",
+                                       "Industrie",
+                                       "Public service",
+                                       "Self-employed",
+                                       "Retired",
+                                       "Housekeeping",
+                                       "Student",
+                                       "Incapacitated",
+                                       "Parental Leave"),
+                            levels = c(4, 1:3, 5:8, 10) # make unemployment reference cat
+    ),
+    edu_fac = factor(.$edu,
+                     labels = c("No degree", 
+                                "Middle school",
+                                "Vocational school",
+                                "Technical school",
+                                "High school",
+                                "Applied high school",
+                                "State college",
+                                "Bachelor",
+                                "Master",
+                                "PhD")
+    ))
+```
+
+## Make long data format
+
+```{r cache=T}
+d_long <-
+  d_wide %>% 
+  pivot_longer(
+    cols = health...W1:corona_pos...W32,
+    names_to = "item",
+    values_to = "value"
+  ) %>% 
+  separate(item, c("item", "wave"), sep = "\\.\\.\\.", extra = "merge") %>% 
+  pivot_wider(names_from = "item", values_from = "value")
+```
+
+## Recode values
+
+```{r}
+# recode such that higher values imply more strength / align with wording
+d_long %<>% 
+  mutate_at(vars(med_txt_kro:med_vid_pri, health, sat_dem, soc_med_fb:soc_med_post), 
+            funs(recode(., `1` = 5L, `2` = 4L, `3` = 3L, `4` = 2L, `5` = 1L))) %>% 
+  mutate_at(vars(loc_cntrl_int_1:loc_cntrl_int_4), 
+            funs(recode(., `1` = 4L, `2` = 3L, `3` = 2L, `4` = 1L))) %>% 
+  mutate_at(vars(born_aus_prnts), 
+            funs(recode(., `3` = 0L, `2` = 2L, `1` = 1L)))
+
+# recode inverted items
+d_long %<>%
+  mutate_at(vars(loc_cntrl_int_3, loc_cntrl_int_4), 
+            funs(recode(., `1` = 4L, `2` = 3L, `3` = 2L, `4` = 1L)))
+
+# recode other
+d_long %<>%
+  mutate(
+    wave = gsub("W", "", .$wave) %>% as.integer(),
+    id = as.integer(id)
+  )
+```
+
+## Order dataset
+
+```{r}
+d_long %<>%
+  arrange(id, wave)
+```
+
+# Impute data
+
+Next we impute data. Note that the actual imputation below is deactivated and loaded from memory to save time.
+
+## Prep
+
+Determine amount of missingness per respondent per wave. 
+
+```{r}
+vars_used <- c("life_sat", "aff_pos_1", "aff_pos_2", "aff_pos_3", "aff_neg_1", "aff_neg_2", "aff_neg_3", "aff_neg_4", "aff_neg_5", "aff_neg_6", "soc_med_read", "soc_med_like_share", "soc_med_post", "soc_med_fb", "soc_med_ig", "soc_med_wa", "soc_med_yt", "soc_med_tw", "age", "male", "born_aus", "born_aus_prnts", "edu_fac", "employment_fac", "health", "res_vienna", "acc_bal", "acc_gar", "home_sqm", "med_txt_kro", "med_txt_sta", "med_txt_pre", "med_txt_oes", "med_txt_kur", "med_txt_slz", "med_txt_son", "med_vid_orf", "med_vid_pri", "risk_prop", "loc_cntrl_int_1", "loc_cntrl_int_2", "loc_cntrl_int_3", "loc_cntrl_int_4", "act_wrk", "act_spo", "act_frn", "act_sho", "act_pet", "sat_dem", "trst_media", "trst_police", "trst_media", "trst_hlthsec", "trst_gov", "trst_army", "corona_pos") # only include vars measured at _all_ points
+```
+
+Filter respondents with more than 50% missing data -- only needed for analyses as originally preregistered (see additional analyses).
+
+```{r eval=T}
+d_long_50 <- 
+  d_long %>% 
+  mutate(na_perc = rowSums(is.na(select(., all_of(vars_used))) / ncol(select(., all_of(vars_used))))) %>% 
+  filter(na_perc < .5)
+write_csv(d_long_50, "data/data_50.csv")
+```
+
+Exclude social media use data, because they were measured only on selected waves.
+
+```{r}
+vars_excl <- c("soc_med_read", "soc_med_like_share", "soc_med_post", "soc_med_fb", "soc_med_ig", "soc_med_wa", "soc_med_yt", "soc_med_tw")
+incl_ma <- d_long %>% 
+  mutate(across(.cols = everything(), .fns = is.na))
+incl_ma[vars_excl] <- FALSE
+
+# now also for data where 50% missing excluded
+incl_ma_50 <- d_long_50 %>% 
+  mutate(across(.cols = everything(), .fns = is.na))
+incl_ma_50[vars_excl] <- FALSE
+```
+
+## Single imputation
+
+For analyses as originally preregistered (see additional analyses), hence only participants who provided more than 50% of all data.
+
+```{r imputation-single-50, eval=F, cache=T}
+d_long_50_imp <- mice(d_long_50, 
+                      method = "pmm", # use predictive mean matching
+                      m = 1, maxit = 30, # only 1 imputation
+                      # where = incl_ma_50,
+                      seed = 180719, print = FALSE)
+d_long_50_imp <- mice::complete(d_long_50_imp)
+write_csv(d_long_50_imp, "data/data_50_imputed.csv")
+```
+
+Because CFAs aren't evaluated with multiple imputation, impute single data-set. Missing data was imputed for everyone.
+
+```{r imputation-single-100, eval=F, cache=T}
+d_long_100_imp <- mice(d_long, 
+                   method = "pmm", # use predictive mean matching
+                   m = 1, maxit = 30, # only 1 imputation
+                   # where = incl_ma,
+                   seed = 180719, print = FALSE)
+d_long_100_imp <- mice::complete(d_long_100_imp)
+write_csv(d_long_100_imp, "data/data_100_imputed.csv")
+```
+
+## Multiple Imputation
+
+Now, multiple imputation of data-sets (5 data sets, 5 iterations), used for the final analyses.
+
+```{r imputation-mult, eval=F, cache=T}
+# impute missing data with multiple imputation
+d_long_100_mim_mice <- mice(d_long, 
+                   method = "pmm", # use predictive mean matching
+                   m = 5, maxit = 5, # 5 imputations, 5 iterations
+                   # where = incl_ma,
+                   seed = 180719, print = FALSE)
+d_long_100_mim <- mice::complete(d_long_100_mim_mice, action = "long", include = TRUE)
+write_csv(d_long_100_mim, "data/data_100_mim.csv")
+```
+
+## Load data
+
+To increase speed, you can also load the imputed data from the directory
+
+```{r eval=T}
+d_long_50_imp <- read_csv("data/data_50_imputed.csv") # data where people with >50% missing data were filtered
+d_long_100_imp <- read_csv("data/data_100_imputed.csv") # data where all people were included
+d_long_100_mim <- read_csv("data/data_100_mim.csv") # data where all people were included
+```
+
+# Create within-between data
+
+First, create means for scales. Then, create mean values for each person (between), and unique changes per wave (within).
+
+```{r}
+d_long_100_mim <-
+  d_long_100_mim %>% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_100_mim %<>%
+  group_by(id) %>% 
+  mutate_at(vars(health:loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %>% 
+  ungroup()
+
+d_long_100_mim_mice <- as.mids(d_long_100_mim)
+```
+
+```{r}
+d_long_100_imp <-
+  d_long_100_imp %>% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_100_imp %<>%
+  group_by(id) %>% 
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %>% 
+  ungroup()
+```
+
+And because later we want to rerun the results as originally preregistered, we'll now do the same for analyses without filtered data.
+
+```{r}
+d_long_50_imp <-
+  d_long_50_imp %>% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_50_imp %<>% 
+  group_by(id) %>% 
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), 
+            funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %>% 
+  ungroup()
+```
+
+And because later we want to rerun the results without imputed data, now the same for data without imputation.
+
+```{r}
+d_long_50 %<>% 
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_50 %<>% 
+  group_by(id) %>% 
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %>% 
+  ungroup()
+```
+
+And now the same for the standardized data set.
+
+```{r}
+d_long_100_mim_std <-
+  d_long_100_mim %>% 
+  group_by(.imp) %>% 
+  mutate_at(vars(gender:corona_pos, -id, -wave, -gender, -male, -born_aus, -born_aus_prnts, -edu_fac, -employment_fac, -res_vienna, -acc_bal, -acc_gar), ~ c(scale(.))) %>% 
+  ungroup()
+
+d_long_100_mim_std %<>%
+  mutate(aff_pos_m = rowMeans(select(., aff_pos_1 : aff_pos_3)),
+         aff_neg_m = rowMeans(select(., aff_neg_1 : aff_neg_6)),
+         loc_cntrl_int_m = rowMeans(select(., loc_cntrl_int_1 : loc_cntrl_int_4)))
+
+d_long_100_mim_std %<>%
+  group_by(id) %>%
+  mutate_at(vars(health:corona_pos, loc_cntrl_int_m), funs(b = mean(., na.rm = TRUE), w = . - mean(., na.rm = TRUE))) %>%
+  ungroup()
+
+d_long_100_mim_mice_std <- as.mids(d_long_100_mim_std)
+```
+
+# Save workspace
+
+```{r cache=F}
+save.image("data/workspace_1.RData")
+```
